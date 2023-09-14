@@ -2,7 +2,7 @@
 // Filename:      Quaternion.h
 // Description:   contains a definition for quaternion structure
 //
-// Create:        13.09.23
+// Created:       13.09.23
 ////////////////////////////////////////////////////////////////////
 #pragma once
 

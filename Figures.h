@@ -3,7 +3,7 @@
 // Description:   contains definitions for geometric figures:
 //                parametric lines, 3D planes, etc.
 //
-// Create:        13.09.23
+// Created:       13.09.23
 ////////////////////////////////////////////////////////////////////
 #pragma once
 

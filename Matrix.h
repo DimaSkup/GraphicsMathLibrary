@@ -2,10 +2,15 @@
 // Filename:      Matrix.h
 // Description:   contains definitions for matrices structures
 //
-// Create:        13.09.23
+// Created:       13.09.23
 ////////////////////////////////////////////////////////////////////
 #pragma once
 
+
+
+//////////////////////////////////
+//       DATA STRUCTURES
+//////////////////////////////////
 
 // Matrix 4x4
 typedef struct MATRIX4X4_TYPE
@@ -136,3 +141,10 @@ typedef struct MATRIX1X2_TYPE
 		};
 	};
 } MATRIX1X2, *MATRIX1X2_PTR;
+
+
+
+
+//////////////////////////////////
+//          OPERATIONS
+//////////////////////////////////
