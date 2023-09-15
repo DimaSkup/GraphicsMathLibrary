@@ -29,6 +29,18 @@ typedef int* FIXP16_PTR;
 #define FIXP16_WP_MASK 0xFFFF0000
 #define FIXP16_ROUND_UP 0x00008000
 
+// extracting of integer and fractional part of the fixed-point number in format 16.16
+#define FIXP16_WP(fp) ((fp) >> FIXP16_SHIFT)
+#define FIXP16_DP(fp) ((fp) && FIXP16_DP_MASK)
+
+// conversion of integer number and float number into fixed-point numbers in format 16.16
+#define INT_TO_FIXP16(i) ((i) << FIXP16_SHIFT)
+#define FLOAT_TO_FIXP16(f) (((float)(f) * (float)FIXP16_MAG + 0.5f))
+
+// conversion of fixed-point number into a float number
+#define FIXP16_TO_FLOAT(fp) ( ((float)fp) / FIXP16_MAG )
+
+
 
 // definition of small numbers
 #define EPSILON_E4 (float)(1E-4)
@@ -45,46 +57,4 @@ typedef int* FIXP16_PTR;
 
 
 
-//////////////////////////////////
-//
-//      IDENTITY MATRICES
-//
-//////////////////////////////////
 
-// identity matrix 4x4
-const MATRIX4X4 IMAT_4X4 =
-{
-	1, 0, 0, 0,
-	0, 1, 0, 0,
-	0, 0, 1, 0,
-	0, 0, 0, 1
-};
-
-
-// identity matrix 4x3
-// (used under the assumption that the fourth 
-// column is always equal to [0 0 0 1])
-const MATRIX4X3 IMAT_4X3 =
-{
-	1, 0, 0,
-	0, 1, 0,
-	0, 0, 1,
-	0, 0, 0
-};
-
-
-// identity matrix 3x3
-const MATRIX3X3 IMAT_3X3 =
-{
-	1, 0, 0,
-	0, 1, 0,
-	0, 0, 1
-};
-
-
-// identity matrix 2x2
-const MATRIX2X2 IMAT_2X2 =
-{
-	1, 0,
-	0, 1
-};

@@ -1,11 +1,13 @@
 ////////////////////////////////////////////////////////////////////
 // Filename:      Matrix.h
-// Description:   contains definitions for matrices structures
+// Description:   contains definitions for matrices structures;
+//                and also has functional for work with these matrices
 //
 // Created:       13.09.23
 ////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <memory>
 
 
 //////////////////////////////////
@@ -133,7 +135,7 @@ typedef struct MATRIX1X2_TYPE
 {
 	union
 	{
-		float M[1][2];  // array for storing data
+		float M[2];  // array for storing data
 
 		struct
 		{
@@ -146,5 +148,137 @@ typedef struct MATRIX1X2_TYPE
 
 
 //////////////////////////////////
+//
+//      IDENTITY MATRICES
+//
+//////////////////////////////////
+
+// identity matrix 4x4
+const MATRIX4X4 IMAT_4X4 =
+{
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+};
+
+
+// identity matrix 4x3
+// (used under the assumption that the fourth 
+// column is always equal to [0 0 0 1])
+const MATRIX4X3 IMAT_4X3 =
+{
+	1, 0, 0,
+	0, 1, 0,
+	0, 0, 1,
+	0, 0, 0
+};
+
+
+// identity matrix 3x3
+const MATRIX3X3 IMAT_3X3 =
+{
+	1, 0, 0,
+	0, 1, 0,
+	0, 0, 1
+};
+
+
+// identity matrix 2x2
+const MATRIX2X2 IMAT_2X2 =
+{
+	1, 0,
+	0, 1
+};
+
+
+
+//////////////////////////////////
 //          OPERATIONS
 //////////////////////////////////
+
+// reset of matrices
+#define MATRIX_ZERO_2X2(m) { memset((void*)(m), 0, sizeof(MATRIX2X2)); }
+#define MATRIX_ZERO_3X3(m) { memset((void*)(m), 0, sizeof(MATRIX3X3)); }
+#define MATRIX_ZERO_4X4(m) { memset((void*)(m), 0, sizeof(MATRIX4X4)); }
+#define MATRIX_ZERO_4X3(m) { memset((void*)(m), 0, sizeof(MATRIX4X3)); }
+
+// macroses for initialization with identity matrices
+#define MAT_IDENTITY_2X2(m) { memcpy((void*)(m), (void*)&IMAT_2X2, sizeof(MATRIX2X)); }
+#define MAT_IDENTITY_3X3(m) { memcpy((void*)(m), (void*)&IMAT_3X3, sizeof(MATRIX2X)); }
+#define MAT_IDENTITY_4X4(m) { memcpy((void*)(m), (void*)&IMAT_4X4, sizeof(MATRIX2X)); }
+#define MAT_IDENTITY_4X3(m) { memcpy((void*)(m), (void*)&IMAT_4X3, sizeof(MATRIX2X)); }
+
+// copying of matrices
+#define MAT_COPY_2X2(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX2X2)); }
+#define MAT_COPY_3X3(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX3X3)); }
+#define MAT_COPY_4X4(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX4X4)); }
+#define MAT_COPY_4X3(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX4X3)); }
+
+
+
+// transpose of matrices
+inline void MAT_TRANSPOSE_3X3(MATRIX3X3* pMat)
+{
+	MATRIX3X3 mt;
+	mt.M00 = pMat->M00;  mt.M01 = pMat->M10;  mt.M02 = pMat->M20;
+	mt.M10 = pMat->M01;  mt.M11 = pMat->M11;  mt.M12 = pMat->M21;
+	mt.M20 = pMat->M02;  mt.M21 = pMat->M12;  mt.M22 = pMat->M22;
+	memcpy((void*)pMat, (void*)&mt, sizeof(MATRIX3X3));
+}
+
+inline void MAT_TRANSPOSE_4X4(MATRIX4X4* pMat)
+{
+	MATRIX4X4 mt;
+	mt.M00 = pMat->M00;  mt.M01 = pMat->M10;  
+	mt.M02 = pMat->M20;  mt.M03 = pMat->M30;
+	mt.M10 = pMat->M01;  mt.M11 = pMat->M11;
+	mt.M12 = pMat->M21;  mt.M13 = pMat->M31;
+	mt.M20 = pMat->M02;  mt.M21 = pMat->M12;
+	mt.M22 = pMat->M22;  mt.M23 = pMat->M32;
+	mt.M30 = pMat->M03;  mt.M31 = pMat->M13;
+	mt.M32 = pMat->M22;  mt.M33 = pMat->M33;
+	memcpy((void*)pMat, (void*)&mt, sizeof(MATRIX4X4));
+}
+
+inline void MAT_TRANSPOSE_3X3(const MATRIX3X3* pMatSrc, MATRIX3X3* pMatDst)
+{
+	pMatDst->M00 = pMatSrc->M00;  pMatDst->M01 = pMatSrc->M10;  pMatDst->M02 = pMatSrc->M20;
+	pMatDst->M10 = pMatSrc->M01;  pMatDst->M11 = pMatSrc->M11;  pMatDst->M12 = pMatSrc->M21;
+	pMatDst->M20 = pMatSrc->M02;  pMatDst->M21 = pMatSrc->M12;  pMatDst->M22 = pMatSrc->M22;
+}
+
+inline void MAT_TRANSPOSE_4X4(const MATRIX4X4* pMatSrc, MATRIX4X4* pMatDst)
+{
+	pMatDst->M00 = pMatSrc->M00;  pMatDst->M01 = pMatSrc->M10;
+	pMatDst->M02 = pMatSrc->M20;  pMatDst->M03 = pMatSrc->M30;
+	pMatDst->M10 = pMatSrc->M01;  pMatDst->M11 = pMatSrc->M11;
+	pMatDst->M12 = pMatSrc->M21;  pMatDst->M13 = pMatSrc->M31;
+	pMatDst->M20 = pMatSrc->M02;  pMatDst->M21 = pMatSrc->M12;
+	pMatDst->M22 = pMatSrc->M22;  pMatDst->M23 = pMatSrc->M32;
+	pMatDst->M30 = pMatSrc->M03;  pMatDst->M31 = pMatSrc->M13;
+	pMatDst->M32 = pMatSrc->M22;  pMatDst->M33 = pMatSrc->M33;
+}
+
+
+// copumn swapping
+inline void MAT_COLUMN_SWAP_2X2(MATRIX2X2* pMat, const int c, const MATRIX1X2* pVec)
+{
+	pMat->M[0][c] = pVec->M[0];
+	pMat->M[1][c] = pVec->M[1];
+}
+
+inline void MAT_COLUMN_SWAP_3X3(MATRIX3X3* pMat, const int c, const MATRIX1X3* pVec)
+{
+	pMat->M[0][c] = pVec->M[0];
+	pMat->M[1][c] = pVec->M[1];
+	pMat->M[2][c] = pVec->M[2];
+}
+
+inline void MAT_COLUMN_SWAP_4X4(MATRIX4X4* pMat, const int c, const MATRIX1X4* pVec)
+{
+	pMat->M[0][c] = pVec->M[0];
+	pMat->M[1][c] = pVec->M[1];
+	pMat->M[2][c] = pVec->M[2];
+	pMat->M[3][c] = pVec->M[3];
+}

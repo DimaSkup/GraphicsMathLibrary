@@ -6,6 +6,9 @@
 ////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "VectorAndPoint.h"
+#include <cmath>
+
 // 2D polar coordinates;
 //
 // notation p(r, theta) means that the point is located at an angle of theta
@@ -48,3 +51,29 @@ typedef struct SPHERICAL3D_TYPE
 	float theta = 0.0f;      // latitude
 	float phi = 0.0f;        // longitude
 } SPHERICAL3D, *SPHERICAL3D_PTR;
+
+
+
+
+////////////////////////////////////////////////////////////////////
+//    PROTOTYPES OF FUNCTIONS FOR WORK WITH COODRINATE SYSTEMS
+////////////////////////////////////////////////////////////////////
+
+void POLAR2D_TO_POINT2D(const POLAR2D* polar, POINT2D* rect);
+
+
+
+
+
+//////////////////////////////////
+//    FUNCTIONS IMPLEMENTATION
+//////////////////////////////////
+
+// 2D polar coordinates into decart (rectangular) coordinates
+void POLAR2D_TO_POINT2D(const POLAR2D* polar, POINT2D* rect)
+{
+	rect->x = polar->r * cosf(polar->theta);
+	rect->y = polar->r * sinf(polar->theta);
+}
+
+////////////////////////////////////////////////////////////////////
