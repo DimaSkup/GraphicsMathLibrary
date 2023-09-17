@@ -56,7 +56,7 @@ float Fast_Sin(float theta)
 	if (theta < 0.0f) theta += 360.0f;
 
 	// calculate integer and fractional part for interpolation
-	int theta_int = (int)theta;
+	int theta_int    = (int)theta;
 	float theta_frac = theta - theta_int;
 
 	// pay attention to correct handling of 359 degrees angle
@@ -65,7 +65,7 @@ float Fast_Sin(float theta)
 		theta_frac*
 		(sin_look[theta_int + 1] - sin_look[theta_int]));
 
-} // end Fast_Cos
+} // end Fast_Sin
 
 ////////////////////////////////////////////////////////////////////
 
@@ -76,7 +76,25 @@ float Fast_Sin(float theta)
 float Fast_Cos(float theta)
 {
 	// convert angle to 0-359
-}
+	theta = fmodf(theta, 360);
+
+	// make angle positive
+	theta += (theta < 0) ? 360.0f : 0.0f;
+
+	// calculate integer and fractional part for interpolation
+	int theta_int    = (int)theta;
+	float theta_frac = theta - theta_int;
+
+	// now compute the value of cos(angle) using the lookup table
+	// and interpolating the fractional part, note that if theta_int
+	// is equat to 359 then theta_int+1 = 360, but this is fine since
+	// the table was made with the entries 0-360 inclusive
+	return (cos_look[theta_int] +
+		theta_frac * (cos_look[theta_int + 1] - cos_look[theta_int]));
+
+} // end Fast_Cos
+
+////////////////////////////////////////////////////////////////////
 
 
 
