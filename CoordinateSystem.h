@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-#include "VectorAndPoint.h"
+#include "VectorAndPoint/VectorAndPoint.h"
 #include "MathConstant.h"
 
 namespace MathLib
