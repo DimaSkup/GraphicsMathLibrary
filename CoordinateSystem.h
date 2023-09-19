@@ -116,7 +116,7 @@ void POINT2D_To_PolarRTh(const POINT2D* pRect,
 
 } // end POINT2D_To_PolarRTh
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void CYLINDRICAL3D_To_POINT3D(const CYLINDRICAL3D* pCyl, POINT3D* pRect)
 {
@@ -127,7 +127,7 @@ void CYLINDRICAL3D_To_POINT3D(const CYLINDRICAL3D* pCyl, POINT3D* pRect)
 
 } // end CYLINDRICAL_To_POINT3D
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void CYLINDRICAL3D_To_RectXYZ(const CYLINDRICAL3D* pCyl, 
 	float* x, 
@@ -140,7 +140,7 @@ void CYLINDRICAL3D_To_RectXYZ(const CYLINDRICAL3D* pCyl,
 	*z = pCyl->z;
 } // end CYLINDRICAL3D_To_RectXYZ
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void POINT3D_To_CylindricalRThZ(const POINT3D* pRect, 
 	float* r, 
@@ -154,7 +154,7 @@ void POINT3D_To_CylindricalRThZ(const POINT3D* pRect,
 
 } // end POINT3D_To_CylindricalRThZ
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void SPHERICAL3D_To_POINT3D(const SPHERICAL3D* pSph, POINT3D* pRect)
 {
@@ -168,7 +168,7 @@ void SPHERICAL3D_To_POINT3D(const SPHERICAL3D* pSph, POINT3D* pRect)
 
 } // end SPHRERICAL3D_To_POINT3D
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void SPHERICAL3D_To_RectXYZ(const SPHERICAL3D* pSph, 
 	float* x,
@@ -186,7 +186,7 @@ void SPHERICAL3D_To_RectXYZ(const SPHERICAL3D* pSph,
 
 } // end SPHERICAL3D_To_RectXYZ
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void POINT3D_To_SPHERICAL3D(const POINT3D* pRect, SPHERICAL3D* pSph)
 {
@@ -201,7 +201,7 @@ void POINT3D_To_SPHERICAL3D(const POINT3D* pRect, SPHERICAL3D* pSph)
 
 } // end POINT3D_To_SPHERICAL3D
 
-  /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 void POINT3D_To_SphericalRThPh(const POINT3D* pRect, 
 	float* p, 

@@ -191,7 +191,10 @@ float VECTOR2D_Length_Fast(const VECTOR2D* pVec)
 	// computes the magnitute of a vector using an approximation;
 	// very fast
 
-	return static_cast<float>(Fast_Distance_2D(pVec->x, pVec->y));
+	return static_cast<float>(Fast_Distance_2D(
+		static_cast<int>(pVec->x), 
+		static_cast<int>(pVec->y)
+	));
 
 } // end VECTOR2D_Length_Fast
 

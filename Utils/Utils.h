@@ -8,12 +8,13 @@
 
 #include "../MathConstant.h"
 
+
 namespace MathLib
 {
 
 // lookup tables for calculating trigonometric functions
-extern float cos_look[361]{ 0.0f };
-extern float sin_look[361]{ 0.0f };
+_declspec(selectany) float cos_look[361]{ 0.0f };
+_declspec(selectany) float sin_look[361]{ 0.0f };
 
 // definition of minimum or maximum of two values
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
