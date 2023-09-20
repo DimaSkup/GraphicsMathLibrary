@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include "../Utils/Utils.h"
+#include "../Log/Log.h"
 
 namespace MathLib
 {
@@ -314,5 +315,28 @@ float VECTOR3D_CosTh(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
 	return (VECTOR3D_Dot(pVecA, pVecB) / (VECTOR3D_Length(pVecA) * VECTOR3D_Length(pVecB)));
 
 } // end VECTOR3D_CosTh
+
+/////////////////////////////////////////////////////////////
+
+void VECTOR3D_Print(const VECTOR3D* pVec, const char* name = "v")
+{
+	// this function prints out a VECTOR3D's data; used for the debugging purpose
+
+	std::string vectorData;
+	vectorData.reserve(45);  // we need about 45 characters to print 3D vector's data (in format: vector_name = [X, Y, Z])
+
+	// make a string with vector's data
+	vectorData += { (std::string)name + " = [" };
+
+	for (UINT i = 0; i < 3; i++)
+	{
+		vectorData += (std::to_string(pVec->M[i]) + ", ");
+	}
+	vectorData += "]\n";
+
+	Log::Debug(LOG_MACRO, vectorData);
+
+} // end VECTOR3D_Print
+
 
 }; // end namespace MathLib

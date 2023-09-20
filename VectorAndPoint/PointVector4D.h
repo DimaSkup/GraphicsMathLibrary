@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include "../Utils/Utils.h"
+#include "../Log/Log.h"
 
 
 namespace MathLib
@@ -344,17 +345,26 @@ float VECTOR4D_CosTh(const VECTOR4D* pVecA, const VECTOR4D* pVecB)
 
 } // end VECTOR4D_CosTh
 
+/////////////////////////////////////////////////////////////
+
 void VECTOR4D_Print(const VECTOR4D* pVec, const char* name = "v")
 {
-	// this function prints out a VECTOR4D
+	// this function prints out a VECTOR4D's data; used for the debugging purpose
 
-	//Log::Debug(LOG_MACRO, name);
-	printf("\n%s = [", name);
-	for (unsigned int index = 0; index < 4; index++)
+	std::string vectorData;
+	vectorData.reserve(50);  // we need about 50 characters to print 4D vector's data (in format: vector_name = [X, Y, Z, W])
+
+	// make a string with vector's data
+	vectorData += { (std::string)name + " = [" };
+	
+	for (UINT i = 0; i < 4; i++)
 	{
-		printf("%f, ", pVec->M[index]);
+		vectorData += (std::to_string(pVec->M[i]) + ", ");
 	}
-	printf("]\n");
+	vectorData += "]\n";
+
+	Log::Debug(LOG_MACRO, vectorData);
+
 } // end VECTOR4D_Print
 
 }; // end namespace MathLib

@@ -10,6 +10,7 @@
 #include <cassert>
 
 #include "../Utils/Utils.h"
+#include "../Log/Log.h"
 
 namespace MathLib
 {
@@ -274,6 +275,28 @@ float VECTOR2D_CosTh(const VECTOR2D* pVecA, const VECTOR2D* pVecB)
 	return (VECTOR2D_Dot(pVecA, pVecB) / (VECTOR2D_Length(pVecA) * VECTOR2D_Length(pVecB)));
 
 } // end VECTOR2D_CosTh
+
+/////////////////////////////////////////////////////////////
+
+void VECTOR2D_Print(const VECTOR2D* pVec, const char* name = "v")
+{
+	// this function prints out a VECTOR2D's data; used for the debugging purpose
+
+	std::string vectorData;
+	vectorData.reserve(35);  // we need about 35 characters to print 2D vector's data (in format: vector_name = [X, Y])
+
+	// make a string with vector's data
+	vectorData += { (std::string)name + " = [" };
+
+	for (UINT i = 0; i < 2; i++)
+	{
+		vectorData += (std::to_string(pVec->M[i]) + ", ");
+	}
+	vectorData += "]\n";
+
+	Log::Debug(LOG_MACRO, vectorData);
+
+} // end VECTOR2D_Print
 
 
 }; // end namespace MathLib

@@ -1,18 +1,24 @@
-////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 // Filename:      Matrix.h
 // Description:   contains definitions for matrices structures;
 //                and also has functional for work with these matrices
 //
 // Created:       13.09.23
-////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
 #include <memory>
+#include <string>
 
+#include "../MathConstant.h"
+#include "../Log/Log.h"
 
-//////////////////////////////////
-//       DATA STRUCTURES
-//////////////////////////////////
+namespace MathLib
+{
+	
+////////////////////////////////////////////////////////////////////////////////////////////
+//                                DATA STRUCTURES
+////////////////////////////////////////////////////////////////////////////////////////////
 
 // Matrix 4x4
 typedef struct MATRIX4X4_TYPE
@@ -31,6 +37,7 @@ typedef struct MATRIX4X4_TYPE
 	};
 } MATRIX4X4, *MATRIX4X4_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 4x3
 typedef struct MATRIX4X3_TYPE
@@ -49,6 +56,7 @@ typedef struct MATRIX4X3_TYPE
 	};
 } MATRIX4X3, *MATRIX4X3_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 1x4
 typedef struct MATRIX1X4_TYPE
@@ -64,6 +72,7 @@ typedef struct MATRIX1X4_TYPE
 	};
 } MATRIX1X4, *MATRIX1X4_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 3x3
 typedef struct MATRIX3X3_TYPE
@@ -81,6 +90,7 @@ typedef struct MATRIX3X3_TYPE
 	};
 } MATRIX3X3, *MATRIX3X3_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 1x3
 typedef struct MATRIX1X3_TYPE
@@ -96,6 +106,7 @@ typedef struct MATRIX1X3_TYPE
 	};
 } MATRIX1X3, *MATRIX1X3_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 3x2
 typedef struct MATRIX3X2_TYPE
@@ -113,6 +124,7 @@ typedef struct MATRIX3X2_TYPE
 	};
 } MATRIX3X2, *MATRIX3X2_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 2x2
 typedef struct MATRIX2X2_TYPE
@@ -129,6 +141,7 @@ typedef struct MATRIX2X2_TYPE
 	};
 } MATRIX2X2, *MATRIX2X2_PTR;
 
+///////////////////////////////////////////////////////////////
 
 // Matrix 1x2
 typedef struct MATRIX1X2_TYPE
@@ -147,11 +160,9 @@ typedef struct MATRIX1X2_TYPE
 
 
 
-//////////////////////////////////
-//
-//      IDENTITY MATRICES
-//
-//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+//                               IDENTITY MATRICES
+////////////////////////////////////////////////////////////////////////////////////////////
 
 // identity matrix 4x4
 const MATRIX4X4 IMAT_4X4 =
@@ -193,9 +204,9 @@ const MATRIX2X2 IMAT_2X2 =
 
 
 
-//////////////////////////////////
-//          OPERATIONS
-//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+//                           MACROSES / INLINE FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////
 
 // reset of matrices
 #define MATRIX_ZERO_2X2(m) { memset((void*)(m), 0, sizeof(MATRIX2X2)); }
@@ -215,7 +226,7 @@ const MATRIX2X2 IMAT_2X2 =
 #define MAT_COPY_4X4(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX4X4)); }
 #define MAT_COPY_4X3(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX4X3)); }
 
-
+///////////////////////////////////////////////////////////////
 
 // transpose of matrices
 inline void MAT_TRANSPOSE_3X3(MATRIX3X3* pMat)
@@ -226,6 +237,8 @@ inline void MAT_TRANSPOSE_3X3(MATRIX3X3* pMat)
 	mt.M20 = pMat->M02;  mt.M21 = pMat->M12;  mt.M22 = pMat->M22;
 	memcpy((void*)pMat, (void*)&mt, sizeof(MATRIX3X3));
 }
+
+///////////////////////////////////////////////////////////////
 
 inline void MAT_TRANSPOSE_4X4(MATRIX4X4* pMat)
 {
@@ -241,12 +254,16 @@ inline void MAT_TRANSPOSE_4X4(MATRIX4X4* pMat)
 	memcpy((void*)pMat, (void*)&mt, sizeof(MATRIX4X4));
 }
 
+///////////////////////////////////////////////////////////////
+
 inline void MAT_TRANSPOSE_3X3(const MATRIX3X3* pMatSrc, MATRIX3X3* pMatDst)
 {
 	pMatDst->M00 = pMatSrc->M00;  pMatDst->M01 = pMatSrc->M10;  pMatDst->M02 = pMatSrc->M20;
 	pMatDst->M10 = pMatSrc->M01;  pMatDst->M11 = pMatSrc->M11;  pMatDst->M12 = pMatSrc->M21;
 	pMatDst->M20 = pMatSrc->M02;  pMatDst->M21 = pMatSrc->M12;  pMatDst->M22 = pMatSrc->M22;
 }
+
+///////////////////////////////////////////////////////////////
 
 inline void MAT_TRANSPOSE_4X4(const MATRIX4X4* pMatSrc, MATRIX4X4* pMatDst)
 {
@@ -260,6 +277,7 @@ inline void MAT_TRANSPOSE_4X4(const MATRIX4X4* pMatSrc, MATRIX4X4* pMatDst)
 	pMatDst->M32 = pMatSrc->M22;  pMatDst->M33 = pMatSrc->M33;
 }
 
+///////////////////////////////////////////////////////////////
 
 // copumn swapping
 inline void MAT_COLUMN_SWAP_2X2(MATRIX2X2* pMat, const int c, const MATRIX1X2* pVec)
@@ -268,12 +286,16 @@ inline void MAT_COLUMN_SWAP_2X2(MATRIX2X2* pMat, const int c, const MATRIX1X2* p
 	pMat->M[1][c] = pVec->M[1];
 }
 
+///////////////////////////////////////////////////////////////
+
 inline void MAT_COLUMN_SWAP_3X3(MATRIX3X3* pMat, const int c, const MATRIX1X3* pVec)
 {
 	pMat->M[0][c] = pVec->M[0];
 	pMat->M[1][c] = pVec->M[1];
 	pMat->M[2][c] = pVec->M[2];
 }
+
+///////////////////////////////////////////////////////////////
 
 inline void MAT_COLUMN_SWAP_4X4(MATRIX4X4* pMat, const int c, const MATRIX1X4* pVec)
 {
@@ -282,3 +304,22 @@ inline void MAT_COLUMN_SWAP_4X4(MATRIX4X4* pMat, const int c, const MATRIX1X4* p
 	pMat->M[2][c] = pVec->M[2];
 	pMat->M[3][c] = pVec->M[3];
 }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//                          COMMON FUNCTIONS PROTOTYPES
+////////////////////////////////////////////////////////////////////////////////////////////
+
+void Mat_Init_2X2(MATRIX2X2* pMat,    
+	const float m00, const float m01,
+	const float m10, const float m11);
+
+void Mat_Add_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMSum);  // add matrices
+void Mat_Mul_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMProd); // mul matrices
+int Mat_Inverse_2X2(const MATRIX2X2* pM, MATRIX2X2* pMi);                        // get inverse matrix
+void Print_Mat_2X2(const MATRIX2X2* pM, const char* name = "M");
+
+
+} // end namespace MathLib

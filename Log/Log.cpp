@@ -63,28 +63,104 @@ Log* Log::Get()
 
 void Log::Print(const char* funcName, const int codeLine, const std::string & message)
 {
-	assert(funcName != nullptr);
-	assert(message.empty() != true);
+	// this function prints a usual message into the console and the log file
 
-	// prints a usual message into the console and the log file
+	assert(funcName != nullptr);
+	assert(!message.empty());
+
+	SetConsoleTextAttribute(Log::handle_, 0x000A); // set console text color to green
+
 	std::stringstream ss;
 	ss << funcName << "() (line: " << codeLine << "): " << message;
 	Print_Helper("", ss.str().c_str());
 
+	SetConsoleTextAttribute(Log::handle_, 0x0007); // set console text color back to white
+	
 } // end Print
 
 /////////////////////////////////////////////////////////////
 
 void Log::Print(const char* funcName, const int codeLine, const char* message)
 {
+	// this function prints a usual message into the console and the log file
+
+	assert(funcName != nullptr);
+	assert((message != nullptr) && (message[0] != '\0'));
+	
+	Log::Print(funcName, codeLine, (std::string)message);
+
+} // end Print
+
+/////////////////////////////////////////////////////////////
+
+void Log::Debug(const char* funcName, const int codeLine, const std::string & message)
+{
+	// this function prints a DEBUG message into the console and the log file
+
+#ifdef _DEBUG
+
+	assert(funcName != nullptr);
+	assert(!message.empty());
+
+	std::stringstream ss;
+	ss << funcName << "() (line: " << codeLine << "): " << message;
+	Print_Helper("DEBUG: ", ss.str().c_str());
+
+#endif
+
+} // end Debug
+
+/////////////////////////////////////////////////////////////
+
+void Log::Debug(const char* funcName, const int codeLine, const char* message)
+{
+	// this function prints a DEBUG message into the console and the log file
+
+#ifdef _DEBUG
+
 	assert(funcName != nullptr);
 	assert((message != nullptr) && (message[0] != '\0'));
 
-	// prints a usual message into the console and the log file
+	Log::Debug(funcName, codeLine, (std::string)message);
+	
+#endif
+
+} // end Debug
+
+/////////////////////////////////////////////////////////////
+
+void Log::Error(const char* funcName, const int codeLine, const std::string & message)
+{
+	// this function prints an ERROR message into the console and the log file
+
+	assert(funcName != nullptr);
+	assert(!message.empty());
+
+	SetConsoleTextAttribute(Log::handle_, 0x0004);   // set console text color to red
+
 	std::stringstream ss;
 	ss << funcName << "() (line: " << codeLine << "): " << message;
-	Print_Helper("", ss.str().c_str());
-}
+	Print_Helper("ERROR: ", ss.str().c_str());
+
+	SetConsoleTextAttribute(Log::handle_, 0x0007);   // set console text color back to white
+
+} // end Error
+
+  /////////////////////////////////////////////////////////////
+
+void Log::Error(const char* funcName, const int codeLine, const char* message)
+{
+	// this function prints an ERROR message into the console and the log file
+
+	assert(funcName != nullptr);
+	assert((message != nullptr) && (message[0] != '\0'));
+	
+	Log::Error(funcName, codeLine, (std::string)message);
+
+} // end Error
+
+
+
 
 
 
