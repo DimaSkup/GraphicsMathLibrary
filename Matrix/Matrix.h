@@ -12,6 +12,7 @@
 
 #include "../MathConstant.h"
 #include "../Log/Log.h"
+#include "../VectorAndPoint/VectorAndPoint.h"
 
 namespace MathLib
 {
@@ -306,6 +307,25 @@ inline void MAT_COLUMN_SWAP_4X4(MATRIX4X4* pMat, const int c, const MATRIX1X4* p
 }
 
 
+///////////////////////////////////////////////////////////////
+
+inline int Mat_Init_3X2(MATRIX3X2* pMat,
+	const float m00, const float m01,
+	const float m10, const float m11,
+	const float m20, const float m21)
+{
+	// this function fills a 3x2 matrix with the sent data in row major form
+	pMat->M00 = m00; pMat->M10 = m01;
+	pMat->M10 = m10; pMat->M11 = m11;
+	pMat->M20 = m20; pMat->M21 = m21;
+
+	// return success
+	return 1;
+
+} // end Mat_Init_3X2
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +340,14 @@ void Mat_Add_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMSum); 
 void Mat_Mul_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMProd); // mul matrices
 int Mat_Inverse_2X2(const MATRIX2X2* pM, MATRIX2X2* pMi);                        // get inverse matrix
 void Print_Mat_2X2(const MATRIX2X2* pM, const char* name = "M");
+int Mat_Mul_1X2_3X2(const MATRIX1X2* pMatA, const MATRIX3X2* pMatB, MATRIX1X2* pMProd);
+float Mat_Det_2X2(const MATRIX2X2* pMat);
+
+///////////////////////////////////////////////////////////////
+
+void Mat_Add_3X3(const MATRIX3X3* pMatA, const MATRIX3X3* pMatB, MATRIX3X3* pMatSum);
+void Mat_Mul_VECTOR3D_3X3(VECTOR3D*)
+
 
 
 } // end namespace MathLib
