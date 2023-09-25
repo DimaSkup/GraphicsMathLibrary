@@ -32,7 +32,7 @@ void Mat_Init_2X2(MATRIX2X2* pMat,
 
 } // end Mat_Init_2X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Mat_Add_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMSum)
 {
@@ -48,7 +48,7 @@ void Mat_Add_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMSum)
 
 } // end Mat_Add_2X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Mat_Mul_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMProd)
 {
@@ -65,7 +65,7 @@ void Mat_Mul_2X2(const MATRIX2X2* pMA, const MATRIX2X2* pMB, MATRIX2X2* pMProd)
 
 } // end Mat_Mul_2X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 int Mat_Inverse_2X2(const MATRIX2X2* pM, MATRIX2X2* pMi)
 {
@@ -97,7 +97,7 @@ int Mat_Inverse_2X2(const MATRIX2X2* pM, MATRIX2X2* pMi)
 
 } // end Mat_Inverse_2X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Print_Mat_2X2(const MATRIX2X2* pM, const char* name)
 {
@@ -131,7 +131,7 @@ void Print_Mat_2X2(const MATRIX2X2* pM, const char* name)
 
 } // Print_Mat_2X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 int Mat_Mul_1X2_3X2(const MATRIX1X2* pMatA, const MATRIX3X2* pMatB, MATRIX1X2* pMProd)
 {
@@ -168,7 +168,7 @@ int Mat_Mul_1X2_3X2(const MATRIX1X2* pMatA, const MATRIX3X2* pMatB, MATRIX1X2* p
 
 } // end Mat_Mul_1X2_3X2
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 float Mat_Det_2X2(const MATRIX2X2* pMat)
 {
@@ -209,7 +209,7 @@ void Mat_Add_3X3(const MATRIX3X3* pMatA, const MATRIX3X3* pMatB, MATRIX3X3* pMat
 
 } // end Mat_Add_3X3
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Mat_Mul_VECTOR3D_3X3(const VECTOR3D* pVec, const MATRIX3X3* pMat, VECTOR3D* pVecProd)
 {
@@ -228,7 +228,7 @@ void Mat_Mul_VECTOR3D_3X3(const VECTOR3D* pVec, const MATRIX3X3* pMat, VECTOR3D*
 
 		for (int row = 0; row < 3; row++)
 		{
-			sum += pVec->M[row] * pMat->M[col][row];
+			sum += pVec->M[row] * pMat->M[row][col];
 		} // for row
 
 		// insert the resulting value
@@ -238,6 +238,137 @@ void Mat_Mul_VECTOR3D_3X3(const VECTOR3D* pVec, const MATRIX3X3* pMat, VECTOR3D*
 
 } // end Mat_Mul_VECTOR3D_3X3
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+void Mat_Mul_1X3_3X3(const MATRIX1X3* pMatA, const MATRIX3X3* pMatB, MATRIX1X3* pMProd)
+{
+	// this function multiplies 1x3 matrix (3D vector) by 3x3 matrix and
+	// returns the result in pMProd;
+	//
+	// This function is similar to the Mat_Mul_VECTOR3D_3X3 function
+
+	assert(pMatA != nullptr);
+	assert(pMatB != nullptr);
+	assert(pMProd != nullptr);
+
+	float sum = 0;
+
+	for (int row = 0; row < 3; row++)
+	{
+		sum = 0;   // at the beginning of each for col loop we have to reset the sum
+
+		for (int index = 0; index < 3; index++)
+		{
+			sum += pMatA->M[index] * pMatB->M[index][row];
+		} // for row
+
+		  // insert the resulting value
+		pMProd->M[row] = sum;
+
+	} // for col
+
+} // end Mat_Mul_1X3_3X3
+
+///////////////////////////////////////////////////////////
+
+int Mat_Mul_3X3(const MATRIX3X3* pMatA, const MATRIX3X3* pMatB, MATRIX3X3* pMProd)
+{
+	// this function multiplies two 3x3 matrices together and returns 
+	// the result in pMProd
+	assert(pMatA != nullptr);
+	assert(pMatB != nullptr);
+	assert(pMProd != nullptr);
+
+	float sum = 0.0f;
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			sum = 0.0f;  // used to hold result
+
+			for (int k = 0; k < 3; k++)
+			{
+				sum += pMatA->M[i][k] + pMatB->M[k][j];
+			} // end for k
+
+			// insert resulting value 
+			pMProd->M[i][j] = sum;
+			
+		} // end for j
+	} // end for i
+
+	return 1;
+}
+
+///////////////////////////////////////////////////////////
+
+void Print_Mat_3X3(const MATRIX3X3* pMat, const char* name)
+{
+	// prints out a 3x3 matrix
+
+	assert(pMat != nullptr);
+
+	std::string strMatrixData{ " " };
+	strMatrixData.reserve(45);  // we need at least 45 characters to print data of a 3x3 matrix 
+
+								// make a string with data of the matrix
+	strMatrixData += name;
+	strMatrixData += " =\n";
+
+	// go through rows
+	for (unsigned int r = 0; r < 3; r++)
+	{
+		strMatrixData += "\t";   // before the row make a tabulation
+
+		// go through columns
+		for (unsigned int c = 0; c < 3; c++)
+		{
+			strMatrixData += std::to_string(pMat->M[r][c]);
+			strMatrixData += ' ';
+		}
+
+		strMatrixData += "\n";
+	}
+
+	Log::Debug(LOG_MACRO, strMatrixData);
+
+} // end Print_Mat_3X3
+
+///////////////////////////////////////////////////////////
+
+float Mat_Det_3X3(const MATRIX3X3* pm)
+{
+	// this function calculates and returns a determinant of the matrix
+	return pm->M00 * ((pm->M11 * pm->M22) - (pm->M21 * pm->M12)) - 
+		   pm->M01 * ((pm->M10 * pm->M22) - (pm->M20 * pm->M12)) +
+		   pm->M02 * ((pm->M10 * pm->M21) - (pm->M20 * pm->M11));
+
+} // end Mat_Det_3X3
+
+///////////////////////////////////////////////////////////
+
+int Mat_Inverse_3X3(const MATRIX3X3* pMat, MATRIX3X3* pMi)
+{
+	// this function computes the inverse of a 3x3 matrix;
+
+	// compute the determinant to see if there is an inverse
+	float det = Mat_Det_3X3(pMat);
+
+	if (fabs(det) < EPSILON_E5)
+	{
+		return 0;
+	}
+
+	// compute inverse to save divides
+	float det_inv = 1.0f / det;
+
+	// compute inverse using m-1 = adjoint(m) / det(m)
+	
+
+
+
+} // Mat_Inverse_3X3
+
 
 } // end namespace MathLib

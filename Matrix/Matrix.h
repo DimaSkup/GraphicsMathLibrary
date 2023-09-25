@@ -216,10 +216,10 @@ const MATRIX2X2 IMAT_2X2 =
 #define MATRIX_ZERO_4X3(m) { memset((void*)(m), 0, sizeof(MATRIX4X3)); }
 
 // macroses for initialization with identity matrices
-#define MAT_IDENTITY_2X2(m) { memcpy((void*)(m), (void*)&IMAT_2X2, sizeof(MATRIX2X)); }
-#define MAT_IDENTITY_3X3(m) { memcpy((void*)(m), (void*)&IMAT_3X3, sizeof(MATRIX2X)); }
-#define MAT_IDENTITY_4X4(m) { memcpy((void*)(m), (void*)&IMAT_4X4, sizeof(MATRIX2X)); }
-#define MAT_IDENTITY_4X3(m) { memcpy((void*)(m), (void*)&IMAT_4X3, sizeof(MATRIX2X)); }
+#define MAT_IDENTITY_2X2(m) { memcpy((void*)(m), (void*)&IMAT_2X2, sizeof(MATRIX2X2)); }
+#define MAT_IDENTITY_3X3(m) { memcpy((void*)(m), (void*)&IMAT_3X3, sizeof(MATRIX3X3)); }
+#define MAT_IDENTITY_4X4(m) { memcpy((void*)(m), (void*)&IMAT_4X4, sizeof(MATRIX4X4)); }
+#define MAT_IDENTITY_4X3(m) { memcpy((void*)(m), (void*)&IMAT_4X3, sizeof(MATRIX4X3)); }
 
 // copying of matrices
 #define MAT_COPY_2X2(pSrcMat, pDestMat) { memcpy((void*)pDestMat, (void*)pSrcMat, sizeof(MATRIX2X2)); }
@@ -346,8 +346,10 @@ float Mat_Det_2X2(const MATRIX2X2* pMat);
 ///////////////////////////////////////////////////////////////
 
 void Mat_Add_3X3(const MATRIX3X3* pMatA, const MATRIX3X3* pMatB, MATRIX3X3* pMatSum);
-void Mat_Mul_VECTOR3D_3X3(VECTOR3D*)
-
+void Mat_Mul_VECTOR3D_3X3(const VECTOR3D* pVec, const MATRIX3X3* pMat, VECTOR3D* pVecProd);
+void Mat_Mul_1X3_3X3(const MATRIX1X3* pMatA, const MATRIX3X3* pMatB, MATRIX1X3* pMProd);
+int Mat_Mul_3X3(const MATRIX3X3* pMatA, const MATRIX3X3* pMatB, MATRIX3X3* pMProd);
+void Print_Mat_3X3(const MATRIX3X3* pMat, const char* name = "M");
 
 
 } // end namespace MathLib
