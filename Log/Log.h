@@ -35,6 +35,7 @@ public:
 	static Log* Get();    // to get a static pointer to this class instance
 
 	// print messages of different kinds
+	static void Print(const char* message);
 	static void Print(const char* funcName, const int codeLine, const std::string & message);
 	static void Print(const char* funcName, const int codeLine, const char* message);
 	static void Debug(const char* funcName, const int codeLine, const std::string & message);

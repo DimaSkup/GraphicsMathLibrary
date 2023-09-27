@@ -61,6 +61,25 @@ Log* Log::Get()
 
 /////////////////////////////////////////////////////////////
 
+void Log::Print(const char* message)
+{
+	// this function prints a usual message into the console and the log file
+
+	assert((message != nullptr) && (message[0] != '\0'));
+
+	SetConsoleTextAttribute(Log::handle_, 0x000A); // set console text color to green
+
+	std::stringstream ss;
+	ss << message;
+	Print_Helper("", ss.str().c_str());
+
+	SetConsoleTextAttribute(Log::handle_, 0x0007); // set console text color back to white
+
+
+} // end Print
+
+/////////////////////////////////////////////////////////////
+
 void Log::Print(const char* funcName, const int codeLine, const std::string & message)
 {
 	// this function prints a usual message into the console and the log file
