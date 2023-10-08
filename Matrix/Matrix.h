@@ -375,6 +375,10 @@ inline int Mat_Init_3X2(MATRIX3X2* pMat,
 //                          COMMON FUNCTIONS PROTOTYPES
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+//
+// 2x2 matrices
+//
+
 void Mat_Init_2X2(MATRIX2X2* pMat,    
 	const float m00, const float m01,
 	const float m10, const float m11);
@@ -387,6 +391,10 @@ void Print_Mat_2X2(const MATRIX2X2* pM, const char* name = "M");
 float Mat_Det_2X2(const MATRIX2X2* pMat);
 
 ///////////////////////////////////////////////////////////////
+
+//
+// 3x3 matrices
+//
 
 void Mat_Init_3X3(MATRIX3X3* pMat,
 	const float m00, const float m01, const float m02,
@@ -403,6 +411,10 @@ int Mat_Inverse_3X3(const MATRIX3X3* pMat, MATRIX3X3* pMi);
 
 ///////////////////////////////////////////////////////////////
 
+//
+// 4x4 matrices
+//
+
 void Mat_Init_4X4(MATRIX4X4* pMat,
 	const float m00, const float m01, const float m02, const float m03,
 	const float m10, const float m11, const float m12, const float m13,
@@ -412,8 +424,9 @@ void Mat_Init_4X4(MATRIX4X4* pMat,
 void Print_Mat_4X4(const MATRIX4X4* pMat, const char* name = "M");
 void Mat_Add_4X4(const MATRIX4X4* pMatA, const MATRIX4X4* pMatB, MATRIX4X4* pMSum);
 void Mat_Mul_4X4(const MATRIX4X4* pMatA, const MATRIX4X4* pMatB, MATRIX4X4* pMProd);
-
-
+void Mat_Mul_VECTOR3D_4X4(const VECTOR3D* pV, const MATRIX4X4* pM, VECTOR3D* pVecProd);
+void Mat_Mul_VECTOR4D_4X4(const VECTOR4D* pV, const MATRIX4X4* pM, VECTOR4D* pVecProd);
+int Mat_Inverse_4X4(const MATRIX4X4* pM, MATRIX4X4* pMi);
 
 
 
@@ -424,5 +437,6 @@ void Mat_Mul_4X4(const MATRIX4X4* pMatA, const MATRIX4X4* pMatB, MATRIX4X4* pMPr
 int Mat_Mul_1X2_3X2(const MATRIX1X2* pMatA, const MATRIX3X2* pMatB, MATRIX1X2* pMProd);
 void Mat_Mul_1X3_3X3(const MATRIX1X3* pMatA, const MATRIX3X3* pMatB, MATRIX1X3* pMProd);
 void Mat_Mul_1X4_4X4(const MATRIX1X4* pMatA, const MATRIX4X4* pMatB, MATRIX1X4* pMProd);
-
+void Mat_Mul_VECTOR3D_4X3(const VECTOR3D* pV, const MATRIX4X3* pM, VECTOR3D* pVecProd);
+void Mat_Mul_VECTOR4D_4X3(const VECTOR4D* pV, const MATRIX4X3* pM, VECTOR4D* pVecProd);
 } // end namespace MathLib

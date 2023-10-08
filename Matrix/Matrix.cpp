@@ -353,7 +353,7 @@ int Mat_Inverse_3X3(const MATRIX3X3* pMat, MATRIX3X3* pMi)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-//                     FUNCTIONS FOR WORK WITH FOR 3X3 MATRICES
+//                     FUNCTIONS FOR WORK WITH FOR 4x4 MATRICES
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void Mat_Init_4X4(MATRIX4X4* pMat,
@@ -472,7 +472,109 @@ void Mat_Mul_4X4(const MATRIX4X4* pMatA, const MATRIX4X4* pMatB, MATRIX4X4* pMPr
 
 } // end Mat_Mul_4X4
 
+///////////////////////////////////////////////////////////
 
+void Mat_Mul_VECTOR3D_4X4(const VECTOR3D* pV, const MATRIX4X4* pM, VECTOR3D* pVecProd)
+{
+	// this function multiplies a VECTOR3D by a 4x4 matrix - pVec*pMat and returns 
+	// the result in pVecProd;
+	//
+	// the function assumes that the vector refers to a 4D homogenous vector, thus the
+	// function assumes that w = 1 to carry out the multiply, also the function
+	// does not carry out the last column multiply since we are assuming w = 1;
+	//
+	// this function can be used both for 3D points/vectors transformation using 4x4 matrices;
+
+
+	for (unsigned int col = 0; col < 3; col++)
+	{
+		unsigned int row = 0; // we use this index later when compute the last element in column;
+
+		pVecProd->M[col] = 0.0f;
+
+		for (row = 0; row < 3; row++)
+		{
+			// add in next product pair
+			pVecProd->M[col] += (pV->M[row] * pM->M[row][col]);
+		} // end for row
+
+		  // add in last element in column or w*pM[3][col]
+		pVecProd->M[col] += pM->M[row][col];
+
+	} // end for col
+
+} // end Mat_Mul_VECTOR3D_4X4
+
+///////////////////////////////////////////////////////////
+
+void Mat_Mul_VECTOR4D_4X4(const VECTOR4D* pV, const MATRIX4X4* pM, VECTOR4D* pVecProd)
+{
+	// this function multiplies a VECTOR4D by a 4x4 matrix 
+	// and returns the result in pVecProd;
+
+	for (unsigned int col = 0; col < 4; col++)
+	{
+		pVecProd->M[col] = 0.0f;
+
+		for (unsigned int row = 0; row < 4; row++)
+		{
+			// add in next product pair
+			pVecProd->M[col] += (pV->M[row] * pM->M[row][col]);
+		} // end for row
+
+	} // end for col
+
+} // end Mat_Mul_VECTOR4D_4X4
+
+///////////////////////////////////////////////////////////
+
+int Mat_Inverse_4X4(const MATRIX4X4* pM, MATRIX4X4* pMi)
+{
+	// this function computes an inverse of 4x4 matrix and
+	// returns the result in pMi;
+	// if the inverse matrix exists the function returns 1;
+	// in another case it returns 0, and the matrix pMi is a zero matrix;
+	//
+	// note: this function only works with matrices where last 
+	// column is [0 0 0 1]t (transpose).
+
+	float det = ( pM->M00 * (pM->M11 * pM->M22 - pM->M21 * pM->M12) - 
+		          pM->M01 * (pM->M10 * pM->M22 - pM->M20 * pM->M12) +
+		          pM->M02 * (pM->M10 * pM->M21 - pM->M20 * pM->M11) );
+
+	// test determinate to see if it it 0
+	if (fabs(det) < EPSILON_E5)
+	{
+		MATRIX_ZERO_4X4(pMi);
+		return 0;
+	}
+
+	float det_inv = 1.0f / det;
+
+	// compute inverse using m-1 = adjoint(m) / det(m)
+	pMi->M00 =  det_inv * (pM->M11*pM->M22 - pM->M12*pM->M21);
+	pMi->M01 = -det_inv * (pM->M01*pM->M22 - pM->M02*pM->M21);
+	pMi->M02 =  det_inv * (pM->M01*pM->M12 - pM->M02*pM->M11);
+	pMi->M03 = 0.0f;  // always 0
+
+	pMi->M10 = -det_inv * (pM->M10*pM->M22 - pM->M12*pM->M20);
+	pMi->M11 =  det_inv * (pM->M00*pM->M22 - pM->M02*pM->M20);
+	pMi->M12 = -det_inv * (pM->M00*pM->M12 - pM->M02*pM->M10);
+	pMi->M13 = 0.0f;  // always 0
+
+	pMi->M20 =  det_inv * (pM->M10*pM->M21 - pM->M11*pM->M20);
+	pMi->M21 = -det_inv * (pM->M00*pM->M21 - pM->M01*pM->M20);
+	pMi->M22 =  det_inv * (pM->M00*pM->M11 - pM->M01*pM->M10);
+	pMi->M23 = 0.0f;  // always 0
+
+	pMi->M30 = -( pM->M30 * pMi->M00 + pM->M31 * pMi->M10 + pM->M32 * pMi->M20 );
+	pMi->M31 = -( pM->M30 * pMi->M01 + pM->M31 * pMi->M11 + pM->M32 * pMi->M21 );
+	pMi->M32 = -( pM->M30 * pMi->M02 + pM->M31 * pMi->M12 + pM->M32 * pMi->M22 );
+	pMi->M33 = 1.0f;  // always 1
+
+	return 1;
+
+} // end Mat_Inverse_4X4
 
 
 
@@ -578,6 +680,65 @@ void Mat_Mul_1X4_4X4(const MATRIX1X4* pMatA, const MATRIX4X4* pMatB, MATRIX1X4* 
 	} // for col
 
 } // end Mat_Mul_1X4_4X4
+
+///////////////////////////////////////////////////////////
+
+void Mat_Mul_VECTOR3D_4X3(const VECTOR3D* pV, const MATRIX4X3* pM, VECTOR3D* pVecProd)
+{
+	// this function multiplies a VECTOR3D by a 4x3 matrix - pVec*pMat and returns 
+	// the result in pVecProd;
+	//
+	// the function assumes that the vector refers to a 4D homogenous vector, thus the
+	// function assumes that w = 1 to carry out the multiply, also the function
+	// does not carry out the last column multiply since we are assuming w = 1;
+	//
+	// this function can be used both for 3D points/vectors transformation using 4x3 matrices;
+
+	for (unsigned int col = 0; col < 3; col++)
+	{
+		unsigned int row = 0;  // we use this index later when compute the last element in column;
+
+		pVecProd->M[col] = 0.0f;
+
+		for (row = 0; row < 3; row++)
+		{
+			// add in next product pair
+			pVecProd->M[col] += (pV->M[row] * pM->M[row][col]);
+		} // end for row
+
+		// add in last element in column or w*pMat[3][col]
+		pVecProd->M[col] += pM->M[row][col];
+
+	} // end for col
+
+} // end Mat_Mul_VECTOR3D_4X3
+
+///////////////////////////////////////////////////////////
+
+void Mat_Mul_VECTOR4D_4X3(const VECTOR4D* pV, const MATRIX4X3* pM, VECTOR4D* pVecProd)
+{
+	// this function multiplies a VECTOR4D by a 4x3 matrix 
+	// and returns the result in pVecProd;
+
+	for (unsigned int col = 0; col < 3; col++)
+	{
+		pVecProd->M[col] = 0.0f;
+
+		for (unsigned int row = 0; row < 4; row++)
+		{
+			// add in next product pair
+			pVecProd->M[col] += (pV->M[row] * pM->M[row][col]);
+		} // end for row
+
+	} // end for col
+
+	// copy back w element 
+	pVecProd->M[3] = pV->M[3];
+
+} // end Mat_Mul_VECTOR4D_4X3
+
+///////////////////////////////////////////////////////////
+
 
 
 } // end namespace MathLib
