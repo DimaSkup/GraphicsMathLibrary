@@ -11,6 +11,7 @@
 
 #include "../Log/Log.h"
 #include "../Matrix/Matrix.h"
+#include "../Figures/Figures.h"
 
 
 class Tests
@@ -18,16 +19,21 @@ class Tests
 public:
 	void Test_Coordinate_System();
 	void Test_Matrices();
+	void Test_Figures();
 
 
 
 private:
-	// MATRIX functional testing
+	// MATRICES functional testing
 	void Test_Matrix_Init();
 	void Test_Matrices_Print_Func();
 	void Test_Matrices_Add_Func();
 	void Test_Matrices_Multiplication_Func();
 
+	// PARAMETRIC LINES functional testing
+	void Test_Parametric_Lines();
+	void Test_Parametric_Lines_2D_Intersection();
+	void Test_Parametric_Lines_3D();
 
 private:
 	MathLib::MATRIX2X2 iMat2x2_;  // identity 2x2 matrix

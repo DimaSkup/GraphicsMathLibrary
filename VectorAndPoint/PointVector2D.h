@@ -24,6 +24,18 @@ namespace MathLib
 // 2D vector or point, without w 
 typedef struct VECTOR2D_TYPE
 {
+	VECTOR2D_TYPE()
+	{
+		this->x = 0.0f;
+		this->y = 0.0f;
+	}
+
+	VECTOR2D_TYPE(const float x, const float y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
 	union
 	{
 		float M[2];     // array for storing
@@ -75,6 +87,16 @@ inline void VECTOR2D_COPY(VECTOR2D* pVecDst, const VECTOR2D* pVecSrc)
 	pVecDst->y = pVecSrc->y;
 }
 
+
+// points initialization with particular values
+inline void POINT2D_INIT_XY(POINT2D* pDst,
+	const float x,
+	const float y)
+{
+	pDst->x = x;
+	pDst->y = y;
+}
+
 // initialization of a destination point with a source point
 inline void POINT2D_INIT(POINT2D* pDst, const POINT2D* pSrc)
 {
@@ -88,7 +110,6 @@ inline void POINT2D_COPY(POINT2D* pDst, const POINT2D* pSrc)
 	pDst->x = pSrc->x;
 	pDst->y = pSrc->y;
 }
-
 
 
 

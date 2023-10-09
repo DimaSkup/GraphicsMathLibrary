@@ -20,7 +20,7 @@
 void Tests::Test_Coordinate_System()
 {
 
-}
+} // end Test_Coordinate_System
 
 ///////////////////////////////////////////////////////////
 
@@ -34,9 +34,18 @@ void Tests::Test_Matrices()
 	Test_Matrices_Add_Func();             // test of addition 
 	Test_Matrices_Multiplication_Func();  // test of multiplication 
 
-}
+} // end Test_Matrices
 
 ///////////////////////////////////////////////////////////
+
+void Tests::Test_Figures()
+{
+	Log::Print("\n\n");
+	Log::Print("-------------------- TEST: FIGURES --------------------\n");
+
+	Test_Parametric_Lines();
+
+} // end Test_Figures
 
 
 
@@ -244,4 +253,138 @@ void Tests::Test_Matrices_Multiplication_Func()
 	Log::Print(LOG_MACRO, "success");
 
 } // end Test_Matrices_Multiplication_Func
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Parametric_Lines()
+{
+	try
+	{
+		Test_Parametric_Lines_2D_Intersection();
+		Test_Parametric_Lines_3D();
+		
+	}
+	catch (std::exception & e)
+	{
+		Log::Error(LOG_MACRO, e.what());
+		return;
+	}
+	
+} // end Test_Parametric_Lines
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Parametric_Lines_2D_Intersection()
+{
+	// this function tests a computation of intersection between two 2D parametric lines;
+
+	int result = -1;
+
+	// CASE 1: the lines haven't an intersection
+	MathLib::POINT2D pBegin1(0, 0);
+	MathLib::POINT2D pEnd1(10, 10);
+	MathLib::POINT2D pBegin2(0, 1);
+	MathLib::POINT2D pEnd2(10, 11);
+	MathLib::POINT2D pt_Intersection;
+
+
+	// init param lines
+	MathLib::PARAMLINE2D line1(pBegin1, pEnd1);
+	MathLib::PARAMLINE2D line2(pBegin2, pEnd2);
+
+	// compute an intersection
+	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
+
+	// if we have no intersection
+	if (result == PARAM_LINE_NO_INTERSECT)
+	{
+		Log::Print(LOG_MACRO, "2D param lines: no intersection:\t\t SUCCESS");
+	}
+	else
+	{
+		throw new std::exception("2D param lines: CASE 1: no intersection: INCORRECT RESULT");
+	}
+
+	/////////////////////////////////////////////////////////////
+
+	// CASE 2: segments have an intersection
+	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(&pEnd1, 8, 5);
+	MathLib::POINT2D_INIT_XY(&pBegin2, 3, 6);
+	MathLib::POINT2D_INIT_XY(&pEnd2, 8, 3);
+
+	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
+	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+
+	// compute an intersection
+	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
+
+	// if we have an intersection of segments
+	if (result == PARAM_LINE_INTERSECT_IN_SEGMENT)
+	{
+		Log::Print(LOG_MACRO, "2D param lines: segment intersection:\t SUCCESS");
+	}
+	else
+	{
+		throw new std::exception("2D param lines: CASE 2: segment intersection: INCORRECT RESULT");
+	}
+
+	/////////////////////////////////////////////////////////////
+
+	// CASE 3: lines have an intersection, but not the segments
+
+	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(&pEnd1, 8, 5);
+	MathLib::POINT2D_INIT_XY(&pBegin2, 3, 6);
+	MathLib::POINT2D_INIT_XY(&pEnd2, 8, 8);
+
+	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
+	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+
+	// compute an intersection
+	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
+
+	// if we have an intersection of segments
+	if (result == PARAM_LINE_INTERSECT_OUT_SEGMENT)
+	{
+		Log::Print(LOG_MACRO, "2D param lines: lines intersection:\t\t SUCCESS");
+	}
+	else
+	{
+		throw new std::exception("2D param lines: lines intersection: INCORRECT RESULT");
+	}
+
+	/////////////////////////////////////////////////////////////
+
+	// CASE 4: lines coincide with each other
+
+	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(&pEnd1, 10, 10);
+	MathLib::POINT2D_INIT_XY(&pBegin2, 1, 1);
+	MathLib::POINT2D_INIT_XY(&pEnd2, 5, 5);
+
+	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
+	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+
+	// compute an intersection
+	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
+
+	// if the parametric lines coincide with each other
+	if (result == PARAM_LINE_INTERSECT_EVERYWHERE)
+	{
+		Log::Print(LOG_MACRO, "2D param lines: lines coincide:\t\t SUCCESS");
+	}
+	else
+	{
+		throw new std::exception("2D param lines: lines coincide: INCORRECT RESULT");
+	}
+
+} // end Test_Parametric_Lines_2D_Intersection
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Parametric_Lines_3D()
+{
+
+} // end Test_Parametric_Lines_3D
 
