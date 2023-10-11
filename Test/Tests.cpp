@@ -247,7 +247,6 @@ void Tests::Test_Matrices_Multiplication_Func()
 	MathLib::MATRIX4X4 m = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 1,2,3,1 }; // transfer matrix
 
 	MathLib::Mat_Mul_1X4_4X4(&v, &m, &vt);
-	vt;
 
 
 	Log::Print(LOG_MACRO, "success");
@@ -262,7 +261,7 @@ void Tests::Test_Parametric_Lines()
 	{
 		Test_Parametric_Lines_2D_Intersection();
 		Test_Parametric_Lines_3D();
-		
+		Test_3D_Planes();
 	}
 	catch (std::exception & e)
 	{
@@ -388,3 +387,67 @@ void Tests::Test_Parametric_Lines_3D()
 
 } // end Test_Parametric_Lines_3D
 
+///////////////////////////////////////////////////////////
+
+void Tests::Test_3D_Planes()
+{
+	//
+	// TEST 1: definition of a point position relative to a plane
+	//
+
+	MathLib::VECTOR3D vec_normal{ 1, 1, 1 };
+	MathLib::POINT3D  point{ 0, 0, 0 };
+	MathLib::PLANE3D  plane1(point, vec_normal);
+
+	// using this value we will define a point positon relative to a plane
+	float hs = 0.0f;
+
+	// there is point which are located in the negative, positive half-space, and
+	// a point which is right on the plane
+	MathLib::POINT3D p_test_negative{ -50, -50, -50 };
+	MathLib::POINT3D p_test_positive{  50, 50, 50 };
+	MathLib::POINT3D p_test_on_plane{  0,  0,  0  };
+
+	// test a location of the point 
+	hs = MathLib::Compute_Point_In_Plane3D(&p_test_negative, &plane1);
+	assert(hs < 0);
+
+	hs = MathLib::Compute_Point_In_Plane3D(&p_test_positive, &plane1);
+	assert(hs > 0);
+
+	hs = MathLib::Compute_Point_In_Plane3D(&p_test_on_plane, &plane1);
+	assert(fabs(hs) <= EPSILON_E5);
+
+	Log::Print(LOG_MACRO, "3D planes: test a point pos relative to a plane: SUCCESS");
+
+
+	///////////////////////////////////////////////////////////
+
+	//
+	// TEST 2: an intersection of a parametric 3D line and a 3D plane
+	//
+
+	// creation of a parametric line from p1 to p2;
+	// this line is parallel to z-axis
+	MathLib::POINT3D p1{ 5, 5, -5 };
+	MathLib::POINT3D p2{ 5, 5, 5 };
+	MathLib::POINT3D pt;
+	MathLib::PARAMLINE3D pl(p1, p2);  
+
+	// creation of a xy plane
+	MathLib::VECTOR3D n{ 0, 0, 1 };
+	MathLib::POINT3D p{ 0, 0, 0 };
+	MathLib::PLANE3D plane2(p, n);
+
+	float t = 0;
+
+	// computation of an intersection point (must be (5,5,0))
+	int intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(&pl, &plane2, &t, &pt);
+	assert(intersection_type == PARAM_LINE_INTERSECT_IN_SEGMENT);
+	assert((pt.x == 5) && (pt.y == 5) && (pt.z == 0));
+
+	Log::Print(LOG_MACRO, "3D planes: test intersection of line and plane:  SUCCESS");
+
+	
+
+} // end Test_3D_Planes

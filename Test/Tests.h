@@ -20,6 +20,7 @@ public:
 	void Test_Coordinate_System();
 	void Test_Matrices();
 	void Test_Figures();
+	
 
 
 
@@ -34,6 +35,7 @@ private:
 	void Test_Parametric_Lines();
 	void Test_Parametric_Lines_2D_Intersection();
 	void Test_Parametric_Lines_3D();
+	void Test_3D_Planes();
 
 private:
 	MathLib::MATRIX2X2 iMat2x2_;  // identity 2x2 matrix

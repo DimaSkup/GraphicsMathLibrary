@@ -30,10 +30,24 @@ typedef struct VECTOR2D_TYPE
 		this->y = 0.0f;
 	}
 
-	VECTOR2D_TYPE(const float x, const float y)
+	VECTOR2D_TYPE(const float dx, const float dy)
 	{
-		this->x = x;
-		this->y = y;
+		this->x = dx;
+		this->y = dy;
+	}
+
+	// init a vector using two 2D points
+	VECTOR2D_TYPE(const VECTOR2D_TYPE & pInit, const VECTOR2D_TYPE & pTerm)
+	{
+		this->x = pTerm.x - pInit.x;
+		this->y = pTerm.y - pInit.y;
+	}
+
+	// init a point using another 2D point
+	VECTOR2D_TYPE(const VECTOR2D_TYPE & pCopy)
+	{
+		this->x = pCopy.x;
+		this->y = pCopy.y;
 	}
 
 	union

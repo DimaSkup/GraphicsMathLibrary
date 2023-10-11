@@ -161,4 +161,108 @@ void Compute_Param_Line3D(const PARAMLINE3D* pL, const float t, POINT3D* pt)
 
 } // Compute_Param_Line3D
 
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//                        
+//                        FUNCTIONS FOR WORK WITH 3D PLANES
+// 
+////////////////////////////////////////////////////////////////////////////////////////////
+
+void PLANE3D_Init(PLANE3D* pPlane,
+	const POINT3D* p0,
+	const VECTOR3D* pNormal,
+	const int normalize)
+{
+	// this function initializes a plane using a 3D point and a normal vector.
+	// Additionally the function normalizes the normal vector if it is necessary;
+	// for that set a normalize parameter to TRUE. Such normalization is needed 
+	// during a work with some algorithms
+
+	assert((pPlane != nullptr));
+	assert((p0 != nullptr));
+	assert((pNormal != nullptr));
+
+	// copy the point and initialize the normal vector
+	POINT3D_COPY(&(pPlane->p0), p0);
+	VECTOR3D_INIT(&(pPlane->n), pNormal);
+
+	// if normalize is TRUE then the normal is made into a unit vector
+	if (normalize == TRUE)
+	{
+		VECTOR3D_Normalize(&(pPlane->n));
+	}
+
+} // end PLANE3D_Init
+
+///////////////////////////////////////////////////////////
+
+float Compute_Point_In_Plane3D(const POINT3D* pt, const PLANE3D* plane)
+{
+	// this function checks a point location relative to a plane
+
+	assert((pt != nullptr) && (plane != nullptr));
+
+	// compute a DOT PRODUCT between a plane's normal vector and the vec_p0pt
+	return (plane->n.x * (pt->x - plane->p0.x)) +
+		   (plane->n.y * (pt->y - plane->p0.y)) +
+		   (plane->n.z * (pt->z - plane->p0.z));
+} // end Compute_Point_In_Plane3D
+
+int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D* pLine,
+	const PLANE3D* pPlane,
+	float* t,
+	POINT3D* pt)
+{
+	// this function defines where the input parametric line intersects the plane.
+	// The function continues the line into both sides to infinity, but a segment
+	// intersects the plane only when t is in a [0, 1] range.
+	//
+	// Returns:
+	//  0 - no intersection,
+	//  1 - segment and plane intersection
+	//  2 - line and plane intersection
+	//  3 - line coincide with a plane
+
+	// check input params
+	assert((pLine != nullptr) && (pPlane != nullptr));
+	assert((t != nullptr) && (pt != nullptr));
+
+	float plane_dot_line = VECTOR3D_Dot(&(pLine->v), &(pPlane->n));
+
+	if (fabs(plane_dot_line) <= EPSILON_E5)
+	{
+		// the line is parallel to the plane. Does it coincide with this plane?
+		if (fabs(Compute_Point_In_Plane3D(&(pLine->p0), pPlane)) <= EPSILON_E5)
+			return PARAM_LINE_INTERSECT_EVERYWHERE;
+		else
+			return PARAM_LINE_NO_INTERSECT;
+	} // if
+
+
+	// first of all find a t parameter
+	*t = -(pPlane->n.x * pLine->p0.x +
+		pPlane->n.y * pLine->p0.y +
+		pPlane->n.z * pLine->p0.z -
+		pPlane->n.x * pPlane->p0.x -
+		pPlane->n.y * pPlane->p0.y -
+		pPlane->n.z * pPlane->p0.z) / (plane_dot_line);
+
+	// put the t parameter into the equation of the straight line, and find
+	// coordinates of an intersection point (x, y, z)
+	pt->x = pLine->p0.x + pLine->v.x * (*t);
+	pt->y = pLine->p0.y + pLine->v.y * (*t);
+	pt->z = pLine->p0.z + pLine->v.z * (*t);
+
+	// checking if the t parameter is in a [0, 1] range
+	if ((*t >= 0) && (*t <= 1))
+		return PARAM_LINE_INTERSECT_IN_SEGMENT;
+	else
+		return PARAM_LINE_INTERSECT_OUT_SEGMENT;
+
+} // end Intersect_Param_Line3D_Plane3D
+
+
 } // end namespace MathLib

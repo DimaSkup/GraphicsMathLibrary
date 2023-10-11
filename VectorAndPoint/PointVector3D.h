@@ -23,6 +23,35 @@ namespace MathLib
 // 3D vector or point, without w
 typedef struct VECTOR3D_TYPE
 {
+	VECTOR3D_TYPE()
+	{
+		this->x = 0.0f;
+		this->y = 0.0f;
+		this->z = 0.0f;
+	}
+
+	VECTOR3D_TYPE(const float dx, const float dy, const float dz)
+	{
+		this->x = dx;
+		this->y = dy;
+		this->z = dz;
+	}
+
+	// init a vector using two 3D points
+	VECTOR3D_TYPE(const VECTOR3D_TYPE & pInit, const VECTOR3D_TYPE & pTerm)
+	{
+		this->x = pTerm.x - pInit.x;
+		this->y = pTerm.y - pInit.y;
+		this->z = pTerm.z - pInit.z;
+	}
+
+	// init a point using another point
+	VECTOR3D_TYPE(const VECTOR3D_TYPE & pCopy)
+	{
+		this->x = pCopy.x;
+		this->y = pCopy.y;
+		this->z = pCopy.z;
+	}
 
 
 	union
