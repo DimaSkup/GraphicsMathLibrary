@@ -307,13 +307,13 @@ void Tests::Test_Parametric_Lines_2D_Intersection()
 	/////////////////////////////////////////////////////////////
 
 	// CASE 2: segments have an intersection
-	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
-	MathLib::POINT2D_INIT_XY(&pEnd1, 8, 5);
-	MathLib::POINT2D_INIT_XY(&pBegin2, 3, 6);
-	MathLib::POINT2D_INIT_XY(&pEnd2, 8, 3);
+	MathLib::POINT2D_INIT_XY(pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(pEnd1, 8, 5);
+	MathLib::POINT2D_INIT_XY(pBegin2, 3, 6);
+	MathLib::POINT2D_INIT_XY(pEnd2, 8, 3);
 
-	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
-	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+	MathLib::Init_Param_Line2D(pBegin1, pEnd1, line1);
+	MathLib::Init_Param_Line2D(pBegin2, pEnd2, line2);
 
 	// compute an intersection
 	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
@@ -332,13 +332,13 @@ void Tests::Test_Parametric_Lines_2D_Intersection()
 
 	// CASE 3: lines have an intersection, but not the segments
 
-	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
-	MathLib::POINT2D_INIT_XY(&pEnd1, 8, 5);
-	MathLib::POINT2D_INIT_XY(&pBegin2, 3, 6);
-	MathLib::POINT2D_INIT_XY(&pEnd2, 8, 8);
+	MathLib::POINT2D_INIT_XY(pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(pEnd1, 8, 5);
+	MathLib::POINT2D_INIT_XY(pBegin2, 3, 6);
+	MathLib::POINT2D_INIT_XY(pEnd2, 8, 8);
 
-	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
-	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+	MathLib::Init_Param_Line2D(pBegin1, pEnd1, line1);
+	MathLib::Init_Param_Line2D(pBegin2, pEnd2, line2);
 
 	// compute an intersection
 	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
@@ -357,13 +357,13 @@ void Tests::Test_Parametric_Lines_2D_Intersection()
 
 	// CASE 4: lines coincide with each other
 
-	MathLib::POINT2D_INIT_XY(&pBegin1, 1, 1);
-	MathLib::POINT2D_INIT_XY(&pEnd1, 10, 10);
-	MathLib::POINT2D_INIT_XY(&pBegin2, 1, 1);
-	MathLib::POINT2D_INIT_XY(&pEnd2, 5, 5);
+	MathLib::POINT2D_INIT_XY(pBegin1, 1, 1);
+	MathLib::POINT2D_INIT_XY(pEnd1, 10, 10);
+	MathLib::POINT2D_INIT_XY(pBegin2, 1, 1);
+	MathLib::POINT2D_INIT_XY(pEnd2, 5, 5);
 
-	MathLib::Init_Param_Line2D(&pBegin1, &pEnd1, &line1);
-	MathLib::Init_Param_Line2D(&pBegin2, &pEnd2, &line2);
+	MathLib::Init_Param_Line2D(pBegin1, pEnd1, line1);
+	MathLib::Init_Param_Line2D(pBegin2, pEnd2, line2);
 
 	// compute an intersection
 	result = MathLib::Intersect_Param_Lines2D(&line1, &line2, &pt_Intersection);
@@ -391,8 +391,25 @@ void Tests::Test_Parametric_Lines_3D()
 
 void Tests::Test_3D_Planes()
 {
+	// this function calls different functions for testing of the functional
+	// for work with 3D planes
+
+	Test_3D_Point_Pos_Relative_To_3D_Plane();
+	Test_Intersection_Plane3D_PARAMLINE3D();
+
+	
+} // end Test_3D_Planes
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_3D_Point_Pos_Relative_To_3D_Plane()
+{
 	//
-	// TEST 1: definition of a point position relative to a plane
+	// computation of a point position relative to a plane:
+	//
+	// a. point is in the negative half-space
+	// b. point is in the positive half-space
+	// c. point in on the plane
 	//
 
 	MathLib::VECTOR3D vec_normal{ 1, 1, 1 };
@@ -405,26 +422,42 @@ void Tests::Test_3D_Planes()
 	// there is point which are located in the negative, positive half-space, and
 	// a point which is right on the plane
 	MathLib::POINT3D p_test_negative{ -50, -50, -50 };
-	MathLib::POINT3D p_test_positive{  50, 50, 50 };
-	MathLib::POINT3D p_test_on_plane{  0,  0,  0  };
+	MathLib::POINT3D p_test_positive{ 50, 50, 50 };
+	MathLib::POINT3D p_test_on_plane{ 0,  0,  0 };
 
 	// test a location of the point 
-	hs = MathLib::Compute_Point_In_Plane3D(&p_test_negative, &plane1);
+
+	// negative half-space
+	hs = MathLib::Compute_Point_In_Plane3D(p_test_negative, plane1);
 	assert(hs < 0);
 
-	hs = MathLib::Compute_Point_In_Plane3D(&p_test_positive, &plane1);
+	// positive half-space
+	hs = MathLib::Compute_Point_In_Plane3D(p_test_positive, plane1);
 	assert(hs > 0);
 
-	hs = MathLib::Compute_Point_In_Plane3D(&p_test_on_plane, &plane1);
+	// the point is on the plane
+	hs = MathLib::Compute_Point_In_Plane3D(p_test_on_plane, plane1);
 	assert(fabs(hs) <= EPSILON_E5);
 
-	Log::Print(LOG_MACRO, "3D planes: test a point pos relative to a plane: SUCCESS");
+	Log::Print(LOG_MACRO, "3D planes: test a point pos relative to a plane:   SUCCESS");
+
+} // Test_3D_Point_Pos_Relative_To_3D_Plane
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Intersection_Plane3D_PARAMLINE3D()
+{
+	// this function tests 4 cases of intersection between a 3D plane and
+	// a 3D parametric line:
+	//   1 -- intersection in segment
+	//   2 -- intersection out segment
+	//   3 -- line coincides with plane
+	//   4 -- no intersection
 
 
-	///////////////////////////////////////////////////////////
 
 	//
-	// TEST 2: an intersection of a parametric 3D line and a 3D plane
+	// TEST 1: an intersection of a parametric 3D line and a 3D plane
 	//
 
 	// creation of a parametric line from p1 to p2;
@@ -432,7 +465,7 @@ void Tests::Test_3D_Planes()
 	MathLib::POINT3D p1{ 5, 5, -5 };
 	MathLib::POINT3D p2{ 5, 5, 5 };
 	MathLib::POINT3D pt;
-	MathLib::PARAMLINE3D pl(p1, p2);  
+	MathLib::PARAMLINE3D paramLine(p1, p2);
 
 	// creation of a xy plane
 	MathLib::VECTOR3D n{ 0, 0, 1 };
@@ -442,12 +475,77 @@ void Tests::Test_3D_Planes()
 	float t = 0;
 
 	// computation of an intersection point (must be (5,5,0))
-	int intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(&pl, &plane2, &t, &pt);
+	int intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(paramLine, plane2, t, pt);
 	assert(intersection_type == PARAM_LINE_INTERSECT_IN_SEGMENT);
 	assert((pt.x == 5) && (pt.y == 5) && (pt.z == 0));
 
-	Log::Print(LOG_MACRO, "3D planes: test intersection of line and plane:  SUCCESS");
+	Log::Print(LOG_MACRO, "3D planes: test intersection (in segment):   \tSUCCESS");
 
-	
 
-} // end Test_3D_Planes
+
+	///////////////////////////////////////////////////////////
+
+	//
+	// TEST 2: a paramteric 3D line intersects a 3D plane out of the segment
+	//
+
+	// reinitialize the parametric 3D line and the 3D plane;
+	MathLib::POINT3D_INIT_XYZ(p1, 1, 1, 1);
+	MathLib::Init_Param_Line3D(p1, p2, paramLine);
+
+	// computation of an intersection point (must be (0, 0, 0))
+	intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(paramLine, plane2, t, pt);
+	assert(intersection_type == PARAM_LINE_INTERSECT_OUT_SEGMENT);
+	assert((pt.x == 0) && (pt.y == 0) && (pt.z == 0));
+
+	Log::Print(LOG_MACRO, "3D planes: test intersection (out segment):  \tSUCCESS");
+
+
+
+	///////////////////////////////////////////////////////////
+
+	//
+	// TEST 3: a paramteric 3D line intersects a 3D plane everywhere (coincides with it)
+	//
+
+	// reinitialize the parametric 3D line and the 3D plane;
+	MathLib::POINT3D_INIT_XYZ(p1, 0, 0, 0);
+	MathLib::POINT3D_INIT_XYZ(p2, 0, 10, 0);
+	MathLib::Init_Param_Line3D(p1, p2, paramLine);
+
+	// computation of an intersection point (must be (0, 0, 0))
+	intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(paramLine, plane2, t, pt);
+	assert(intersection_type == PARAM_LINE_INTERSECT_EVERYWHERE);
+
+	Log::Print(LOG_MACRO, "3D planes: test intersection (coincidence):  \tSUCCESS");
+
+
+	///////////////////////////////////////////////////////////
+
+	//
+	// TEST 4: a paramteric 3D line hasn't an intersection with a 3D plane 
+	//
+
+	// reinitialize the parametric 3D line and the 3D plane;
+	MathLib::POINT3D_INIT_XYZ(p1, 5, 5, 5);
+	MathLib::POINT3D_INIT_XYZ(p2, 5, 10, 5);
+	MathLib::Init_Param_Line3D(p1, p2, paramLine);
+
+	// computation of an intersection point (must be (0, 0, 0))
+	intersection_type = MathLib::Intersect_Param_Line3D_Plane3D(paramLine, plane2, t, pt);
+	assert(intersection_type == PARAM_LINE_NO_INTERSECT);
+
+	Log::Print(LOG_MACRO, "3D planes: test intersection (no intersection):\tSUCCESS");
+
+	return;
+
+} // Test_Intersection_Plane3D_PARAMLINE3D
+
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Distance_From_Point3D_To_Plane3D()
+{
+
+
+
+} // Test_Distance_From_Point3D_To_Plane3D

@@ -13,6 +13,7 @@ int main()
 	Log log;
 	Tests test;
 
+	test.Test_Matrices();
 	test.Test_Figures();
 	
 

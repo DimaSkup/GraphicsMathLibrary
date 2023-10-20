@@ -100,7 +100,7 @@ typedef struct PLANE3D_TYPE
 // 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void Init_Param_Line2D(const POINT2D* pInit, const POINT2D* pTerm, PARAMLINE2D* pLine);
+void Init_Param_Line2D(const POINT2D & pInit, const POINT2D & pTerm, PARAMLINE2D & pLine);
 
 void Compute_Param_Line2D(const PARAMLINE2D* pLine, const float t, POINT2D* pPoint);
 
@@ -110,12 +110,9 @@ int Intersect_Param_Lines2D(const PARAMLINE2D* pLine1,
 
 int Intersect_Param_Lines2D(const PARAMLINE2D* line1, const PARAMLINE2D* line2, POINT2D* pt);
 
-void Init_Param_Line3D(const POINT3D* pInit, const POINT3D* pTerm, PARAMLINE3D* pLine);
+void Init_Param_Line3D(const POINT3D & pInit, const POINT3D & pTerm, PARAMLINE3D & pLine);
 
-void Compute_Param_Line3D(const PARAMLINE3D* pLine, const float t, POINT3D* pt);
-
-
-
+void Compute_Point_On_Param_Line3D(const PARAMLINE3D & pLine, const float t, POINT3D & pt);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,16 +121,24 @@ void Compute_Param_Line3D(const PARAMLINE3D* pLine, const float t, POINT3D* pt);
 // 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void PLANE3D_Init(PLANE3D* pPlane,
-	const POINT3D* p0,
-	const VECTOR3D* pNormal,
+void PLANE3D_Init(PLANE3D & plane,
+	const POINT3D & p0,
+	const VECTOR3D & normal,
 	const int normalize);
 
-float Compute_Point_In_Plane3D(const POINT3D* pt, const PLANE3D* plane);
+float Compute_Point_In_Plane3D(const POINT3D & pt, const PLANE3D & plane);
 
-int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D* pLine,
-	const PLANE3D* pPlane,
-	float* t,
-	POINT3D* pt);
+int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D & pLine,
+	const PLANE3D & plane,
+	float & t,
+	POINT3D & pt);
+
+float Distance_Point3D_To_Plane3D(const POINT3D & point,
+	const PLANE3D & plane,
+	POINT3D & base);
+
+float Distance_Point3D_To_Plane3D_Normalized(const POINT3D & point,
+	const PLANE3D & plane,
+	POINT3D & base);
 
 } // end namespace MathLib

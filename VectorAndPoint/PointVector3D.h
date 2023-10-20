@@ -23,6 +23,7 @@ namespace MathLib
 // 3D vector or point, without w
 typedef struct VECTOR3D_TYPE
 {
+	// different constructors
 	VECTOR3D_TYPE()
 	{
 		this->x = 0.0f;
@@ -30,6 +31,7 @@ typedef struct VECTOR3D_TYPE
 		this->z = 0.0f;
 	}
 
+	// init a vector using separate float values
 	VECTOR3D_TYPE(const float dx, const float dy, const float dz)
 	{
 		this->x = dx;
@@ -37,7 +39,7 @@ typedef struct VECTOR3D_TYPE
 		this->z = dz;
 	}
 
-	// init a vector using two 3D points
+	// init a vector using references of two 3D points
 	VECTOR3D_TYPE(const VECTOR3D_TYPE & pInit, const VECTOR3D_TYPE & pTerm)
 	{
 		this->x = pTerm.x - pInit.x;
@@ -45,7 +47,7 @@ typedef struct VECTOR3D_TYPE
 		this->z = pTerm.z - pInit.z;
 	}
 
-	// init a point using another point
+	// copy constructor
 	VECTOR3D_TYPE(const VECTOR3D_TYPE & pCopy)
 	{
 		this->x = pCopy.x;
@@ -74,57 +76,69 @@ typedef struct VECTOR3D_TYPE
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-inline void VECTOR3D_ZERO(VECTOR3D* pVec)
+inline void VECTOR3D_ZERO(VECTOR3D & v)
 {
-	pVec->x = pVec->y = pVec->z = 0.0f;
+	v.x = v.y = v.z = 0.0f;
 }
 
 /////////////////////////////////////////////////////////////
 
-inline void VECTOR3D_INIT_XYZ(VECTOR3D* pVec,
+inline void VECTOR3D_INIT_XYZ(VECTOR3D & vec,
 	const float x,
 	const float y,
 	const float z)
 {
-	pVec->x = x;
-	pVec->y = y;
-	pVec->z = z;
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
 }
 
 /////////////////////////////////////////////////////////////
 
-inline void VECTOR3D_INIT(VECTOR3D* pVecDst, const VECTOR3D* pVecSrc)
+inline void VECTOR3D_INIT(VECTOR3D & vecDst, const VECTOR3D & vecSrc)
 {
-	pVecDst->x = pVecSrc->x;
-	pVecDst->y = pVecSrc->y;
-	pVecDst->z = pVecSrc->z;
+	vecDst.x = vecSrc.x;
+	vecDst.y = vecSrc.y;
+	vecDst.z = vecSrc.z;
 }
 
 /////////////////////////////////////////////////////////////
 
-inline void VECTOR3D_COPY(VECTOR3D* pVecDst, const VECTOR3D* pVecSrc)
+inline void VECTOR3D_COPY(VECTOR3D & vecDst, const VECTOR3D & vecSrc)
 {
-	pVecDst->x = pVecSrc->x;
-	pVecDst->y = pVecSrc->y;
-	pVecDst->z = pVecSrc->z;
+	vecDst.x = vecSrc.x;
+	vecDst.y = vecSrc.y;
+	vecDst.z = vecSrc.z;
 }
 
 /////////////////////////////////////////////////////////////
 
-inline void POINT3D_INIT(POINT3D* pDst, const POINT3D* pSrc)
+inline void POINT3D_INIT_XYZ(VECTOR3D & pPoint,
+	const float x,
+	const float y,
+	const float z)
 {
-	pDst->x = pSrc->x;
-	pDst->y = pSrc->y;
-	pDst->z = pSrc->z;
+	pPoint.x = x;
+	pPoint.y = y;
+	pPoint.z = z;
 }
 
 /////////////////////////////////////////////////////////////
 
-inline void POINT3D_COPY(POINT3D* pDst, const POINT3D* pSrc)
+inline void POINT3D_INIT(POINT3D & pDst, const POINT3D & pSrc)
 {
-	pDst->x = pSrc->x;
-	pDst->y = pSrc->y;
-	pDst->z = pSrc->z;
+	pDst.x = pSrc.x;
+	pDst.y = pSrc.y;
+	pDst.z = pSrc.z;
+}
+
+/////////////////////////////////////////////////////////////
+
+inline void POINT3D_COPY(POINT3D & pDst, const POINT3D & pSrc)
+{
+	pDst.x = pSrc.x;
+	pDst.y = pSrc.y;
+	pDst.z = pSrc.z;
 }
 
 
@@ -134,27 +148,27 @@ inline void POINT3D_COPY(POINT3D* pDst, const POINT3D* pSrc)
 //                       MATH OPERATIONS WITH VECTORS/POINTS
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void VECTOR3D_Add(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecSum);
-void VECTOR3D_Sub(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecDiff);
+void VECTOR3D_Add(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & pVecSum);
+void VECTOR3D_Sub(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & pVecDiff);
 
-VECTOR3D VECTOR3D_Add(const VECTOR3D* pVecA, const VECTOR3D* pVecB);
-VECTOR3D VECTOR3D_Sub(const VECTOR3D* pVecA, const VECTOR3D* pVecB);
+VECTOR3D VECTOR3D_Add(const VECTOR3D & vecA, const VECTOR3D & vecB);
+VECTOR3D VECTOR3D_Sub(const VECTOR3D & vecA, const VECTOR3D & vecB);
 
-void VECTOR3D_Scale(const float k, VECTOR3D* pVecA);
-void VECTOR3D_Scale(const float k, const VECTOR3D* pVecA, VECTOR3D* pVecScaled);
+void VECTOR3D_Scale(const float k, VECTOR3D & vecA);
+void VECTOR3D_Scale(const float k, const VECTOR3D & vecA, VECTOR3D & vecScaled);
 
-float VECTOR3D_Dot(const VECTOR3D* pVecA, const VECTOR3D* pVecB);
-void VECTOR3D_Cross(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecN);
-VECTOR3D VECTOR3D_Cross(const VECTOR3D* pVecA, const VECTOR3D* pVecB);
+float VECTOR3D_Dot(const VECTOR3D & vecA, const VECTOR3D & vecB);
+void VECTOR3D_Cross(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & vecN);
+VECTOR3D VECTOR3D_Cross(const VECTOR3D & vecA, const VECTOR3D & vecB);
 
-float VECTOR3D_Length(const VECTOR3D* pVec);
-float VECTOR3D_Length_Fast(const VECTOR3D* pVec);
+float VECTOR3D_Length(const VECTOR3D & vec);
+float VECTOR3D_Length_Fast(const VECTOR3D & vec);
 
-void VECTOR3D_Normalize(VECTOR3D* pVec);
-void VECTOR3D_Normalize(const VECTOR3D* pVa, VECTOR3D* pVecN);
+void VECTOR3D_Normalize(VECTOR3D & vec);
+void VECTOR3D_Normalize(const VECTOR3D & vec, VECTOR3D & pVecN);
 
-void VECTOR3D_Build(const VECTOR3D* pInit, const VECTOR3D* pTerm, VECTOR3D* pResult);
-float VECTOR3D_CosTh(const VECTOR3D* pVecA, const VECTOR3D* pVecB);
-void VECTOR3D_Print(const VECTOR3D* pVec, const char* name = "v");
+void VECTOR3D_Build(const VECTOR3D & vInit, const VECTOR3D & vTerm, VECTOR3D & vecResult);
+float VECTOR3D_CosTh(const VECTOR3D & vecA, const VECTOR3D & pVecB);
+void VECTOR3D_Print(const VECTOR3D & vec, const char* name = "v");
 
 }; // end namespace MathLib

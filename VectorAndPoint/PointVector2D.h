@@ -36,7 +36,7 @@ typedef struct VECTOR2D_TYPE
 		this->y = dy;
 	}
 
-	// init a vector using two 2D points
+	// init a vector using references to two 2D points
 	VECTOR2D_TYPE(const VECTOR2D_TYPE & pInit, const VECTOR2D_TYPE & pTerm)
 	{
 		this->x = pTerm.x - pInit.x;
@@ -73,56 +73,56 @@ typedef struct VECTOR2D_TYPE
 // functions for work with vectors
 
 // reset of vectors
-inline void VECTOR2D_ZERO(VECTOR2D* pVec)
+inline void VECTOR2D_ZERO(VECTOR2D & vec)
 {
-	pVec->x = pVec->y = 0.0f;
+	vec.x = vec.y = 0.0f;
 }
 
 // vectors initialization with particular values
-inline void VECTOR2D_INIT_XY(VECTOR2D* pVec,
+inline void VECTOR2D_INIT_XY(VECTOR2D & vec,
 	const float x,
 	const float y)
 {
-	pVec->x = x;
-	pVec->y = y;
+	vec.x = x;
+	vec.y = y;
 }
 
 // vectors initialization with the other vectors
-inline void VECTOR2D_INIT(VECTOR2D* pVecDst, const VECTOR2D* pVecSrc)
+inline void VECTOR2D_INIT(VECTOR2D & vecDst, const VECTOR2D & vecSrc)
 {
-	pVecDst->x = pVecSrc->x;
-	pVecDst->y = pVecSrc->y;
+	vecDst.x = vecSrc.x;
+	vecDst.y = vecSrc.y;
 }
 
 // copying of vectors
-inline void VECTOR2D_COPY(VECTOR2D* pVecDst, const VECTOR2D* pVecSrc)
+inline void VECTOR2D_COPY(VECTOR2D & vecDst, const VECTOR2D & vecSrc)
 {
-	pVecDst->x = pVecSrc->x;
-	pVecDst->y = pVecSrc->y;
+	vecDst.x = vecSrc.x;
+	vecDst.y = vecSrc.y;
 }
 
 
 // points initialization with particular values
-inline void POINT2D_INIT_XY(POINT2D* pDst,
+inline void POINT2D_INIT_XY(POINT2D & pDst,
 	const float x,
 	const float y)
 {
-	pDst->x = x;
-	pDst->y = y;
+	pDst.x = x;
+	pDst.y = y;
 }
 
 // initialization of a destination point with a source point
-inline void POINT2D_INIT(POINT2D* pDst, const POINT2D* pSrc)
+inline void POINT2D_INIT(POINT2D & pDst, const POINT2D & pSrc)
 {
-	pDst->x = pSrc->x;
-	pDst->y = pSrc->y;
+	pDst.x = pSrc.x;
+	pDst.y = pSrc.y;
 }
 
 // copying data from a source point into a destination point
-inline void POINT2D_COPY(POINT2D* pDst, const POINT2D* pSrc)
+inline void POINT2D_COPY(POINT2D & pDst, const POINT2D & pSrc)
 {
-	pDst->x = pSrc->x;
-	pDst->y = pSrc->y;
+	pDst.x = pSrc.x;
+	pDst.y = pSrc.y;
 }
 
 
@@ -132,20 +132,25 @@ inline void POINT2D_COPY(POINT2D* pDst, const POINT2D* pSrc)
 ////////////////////////////////////////////////////////////////////////////////////////////
 //                       MATH OPERATIONS WITH 2D VECTORS/POINTS
 ////////////////////////////////////////////////////////////////////////////////////////////
-void VECTOR2D_Add(const VECTOR2D* pVecA, const VECTOR2D* pVecB, VECTOR2D* pVecSum);
-VECTOR2D VECTOR2D_Add(const VECTOR2D* pVecA, const VECTOR2D* pVecB);
-void VECTOR2D_Sub(const VECTOR2D* pVecA, const VECTOR2D* pVecB, VECTOR2D* pVecDiff);
-VECTOR2D VECTOR2D_Sub(const VECTOR2D* pVecA, const VECTOR2D* pVecB);
-void VECTOR2D_Scale(const float k, VECTOR2D* pVecA);
-void VECTOR2D_Scale(const float k, const VECTOR2D* pVecA, VECTOR2D* pVecScaled);
-float VECTOR2D_Dot(const VECTOR2D* pVecA, const VECTOR2D* pVecB);
-float VECTOR2D_Length(const VECTOR2D* pVec);
-float VECTOR2D_Length_Fast(const VECTOR2D* pVec);
-void VECTOR2D_Normalize(VECTOR2D* pVec);
-void VECTOR2D_Normalize(const VECTOR2D* pVa, VECTOR2D* pVecN);
-void VECTOR2D_Build(const VECTOR2D* pInit, const VECTOR2D* pTerm, VECTOR2D* pResult);
-float VECTOR2D_CosTh(const VECTOR2D* pVecA, const VECTOR2D* pVecB);
-void VECTOR2D_Print(const VECTOR2D* pVec, const char* name = "v");
+void VECTOR2D_Add(const VECTOR2D & vecA, const VECTOR2D & vecB, VECTOR2D & vecSum);
+void VECTOR2D_Sub(const VECTOR2D & vecA, const VECTOR2D & vecB, VECTOR2D & vecDiff);
+
+VECTOR2D VECTOR2D_Add(const VECTOR2D & vecA, const VECTOR2D & vecB);
+VECTOR2D VECTOR2D_Sub(const VECTOR2D & vecA, const VECTOR2D & vecB);
+
+void VECTOR2D_Scale(const float k, VECTOR2D & vecA);
+void VECTOR2D_Scale(const float k, const VECTOR2D & vecA, VECTOR2D & vecScaled);
+
+float VECTOR2D_Dot(const VECTOR2D & vecA, const VECTOR2D & vecB);
+float VECTOR2D_Length(const VECTOR2D & vec);
+float VECTOR2D_Length_Fast(const VECTOR2D & vec);
+
+void VECTOR2D_Normalize(VECTOR2D & vec);
+void VECTOR2D_Normalize(const VECTOR2D & vec, VECTOR2D & vecN);
+
+void VECTOR2D_Build(const VECTOR2D & vInit, const VECTOR2D& vTerm, VECTOR2D & vResult);
+float VECTOR2D_CosTh(const VECTOR2D & vecA, const VECTOR2D & vecB);
+void VECTOR2D_Print(const VECTOR2D & vec, const char* name = "v");
 
 
 } // end of MathLib namespace

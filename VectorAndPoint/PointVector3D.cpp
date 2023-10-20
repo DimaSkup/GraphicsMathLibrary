@@ -12,26 +12,26 @@ namespace MathLib
 {
 
 
-void VECTOR3D_Add(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecSum)
+void VECTOR3D_Add(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & vecSum)
 {
 	// this function adds pVecA+pVecB and returns it in the pVecSum
-	pVecSum->x = pVecA->x + pVecB->x;
-	pVecSum->y = pVecA->y + pVecB->y;
-	pVecSum->z = pVecA->z + pVecB->z;
+	vecSum.x = vecA.x + vecB.x;
+	vecSum.y = vecA.y + vecB.y;
+	vecSum.z = vecA.z + vecB.z;
 
 } // end VECTOR3D_Add
 
 /////////////////////////////////////////////////////////////
 
-VECTOR3D VECTOR3D_Add(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
+VECTOR3D VECTOR3D_Add(const VECTOR3D & vecA, const VECTOR3D & vecB)
 {
 	// this function adds pVecA+pVecB and returns the result on
 	// the stack
 	VECTOR3D vecSum;
 
-	vecSum.x = pVecA->x + pVecB->x;
-	vecSum.y = pVecA->y + pVecB->y;
-	vecSum.z = pVecA->z + pVecB->z;
+	vecSum.x = vecA.x + vecB.x;
+	vecSum.y = vecA.y + vecB.y;
+	vecSum.z = vecA.z + vecB.z;
 
 	return vecSum;
 
@@ -39,107 +39,93 @@ VECTOR3D VECTOR3D_Add(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Sub(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecDiff)
+void VECTOR3D_Sub(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & vecDiff)
 {
 	// this function subtracts pVecA-pVecB and returns the result in the pVecDiff
-	assert(pVecA != nullptr);
-	assert(pVecB != nullptr);
-	assert(pVecDiff != nullptr);
 
-	pVecDiff->x = pVecA->x - pVecB->x;
-	pVecDiff->y = pVecA->y - pVecB->y;
-	pVecDiff->z = pVecA->z - pVecB->z;
+	vecDiff.x = vecA.x - vecB.x;
+	vecDiff.y = vecA.y - vecB.y;
+	vecDiff.z = vecA.z - vecB.z;
 
 } // end VECTOR3D_Sub
 
 /////////////////////////////////////////////////////////////
 
-VECTOR3D VECTOR3D_Sub(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
+VECTOR3D VECTOR3D_Sub(const VECTOR3D & vecA, const VECTOR3D & vecB)
 {
 	// this function subtracts pVecA-pVecB and returns the result on 
 	// the stack
 
-	assert(pVecA != nullptr);
-	assert(pVecB != nullptr);
-
 	VECTOR3D vecDiff;
 
-	vecDiff.x = pVecA->x - pVecB->x;
-	vecDiff.y = pVecA->y - pVecB->y;
-	vecDiff.z = pVecA->z - pVecB->z;
+	vecDiff.x = vecA.x - vecB.x;
+	vecDiff.y = vecA.y - vecB.y;
+	vecDiff.z = vecA.z - vecB.z;
 
 	return vecDiff;
+
 } // end VECTOR3D_Sub
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Scale(const float k, VECTOR3D* pVecA)
+void VECTOR3D_Scale(const float k, VECTOR3D & vecA)
 {
 	// this function scales a vector by the constant k,
 	// in place, note that w is left unchanged
 
-	assert(pVecA != nullptr);
-
-	pVecA->x *= k;
-	pVecA->y *= k;
-	pVecA->z *= k;
+	vecA.x *= k;
+	vecA.y *= k;
+	vecA.z *= k;
 
 } // end VECTOR3D_Scale
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Scale(const float k, const VECTOR3D* pVecA, VECTOR3D* pVecScaled)
+void VECTOR3D_Scale(const float k, const VECTOR3D & vecA, VECTOR3D & vecScaled)
 {
 	// this function scales a vector by the constant k
 	// and returns the result in the pVecScaled
 
-	assert(pVecA != nullptr);
-	assert(pVecScaled != nullptr);
-
-	pVecScaled->x = pVecA->x * k;
-	pVecScaled->y = pVecA->y * k;
-	pVecScaled->z = pVecA->z * k;
+	vecScaled.x = vecA.x * k;
+	vecScaled.y = vecA.y * k;
+	vecScaled.z = vecA.z * k;
 
 } // end VECTOR3D_Scale
 
 /////////////////////////////////////////////////////////////
 
-float VECTOR3D_Dot(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
+float VECTOR3D_Dot(const VECTOR3D & vecA, const VECTOR3D & vecB)
 {
 	// calculates a dot product between two vectors and returns it on the stack.
-	assert((pVecA != nullptr) && (pVecB != nullptr));
 
-	return (pVecA->x * pVecB->x) + (pVecA->y * pVecB->y) + (pVecA->z * pVecB->z);
+	return (vecA.x * vecB.x) + (vecA.y * vecB.y) + (vecA.z * vecB.z);
 
 } // end VECTOR3D_Dot
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Cross(const VECTOR3D* pVecA, const VECTOR3D* pVecB, VECTOR3D* pVecN)
+void VECTOR3D_Cross(const VECTOR3D & vecA, const VECTOR3D & vecB, VECTOR3D & vecN)
 {
 	// computes the cross product between pVecA and pVecB and returns the result in pVecN;
-	assert((pVecA != nullptr) && (pVecB != nullptr) && (pVecN != nullptr));
 
-	pVecN->x = (pVecA->y * pVecB->z) - (pVecA->z * pVecB->y);
-	pVecN->y = (pVecA->z * pVecB->x) - (pVecA->x * pVecB->z);
-	pVecN->z = (pVecA->x * pVecB->y) - (pVecA->y * pVecB->x);
+	vecN.x = (vecA.y * vecB.z) - (vecA.z * vecB.y);
+	vecN.y = (vecA.z * vecB.x) - (vecA.x * vecB.z);
+	vecN.z = (vecA.x * vecB.y) - (vecA.y * vecB.x);
 
 } // end VECTOR3D_Cross
 
 /////////////////////////////////////////////////////////////
 
-VECTOR3D VECTOR3D_Cross(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
+VECTOR3D VECTOR3D_Cross(const VECTOR3D & vecA, const VECTOR3D & vecB)
 {
 	// computes the cross product between pVecA and pVecB and returns the result 
 	// on the stack;
-	assert(pVecA != nullptr);
-	assert(pVecB != nullptr);
 
 	VECTOR3D vecN{ 0.0f, 0.0f, 0.0f };
 
-	vecN.x = (pVecA->y * pVecB->z) - (pVecA->z * pVecB->y);
-	vecN.y = (pVecA->z * pVecB->x) - (pVecA->x * pVecB->z);
-	vecN.z = (pVecA->x * pVecB->y) - (pVecA->y * pVecB->x);
+	vecN.x = (vecA.y * vecB.z) - (vecA.z * vecB.y);
+	vecN.y = (vecA.z * vecB.x) - (vecA.x * vecB.z);
+	vecN.z = (vecA.x * vecB.y) - (vecA.y * vecB.x);
 
 	return vecN;
 
@@ -147,124 +133,108 @@ VECTOR3D VECTOR3D_Cross(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
 
 /////////////////////////////////////////////////////////////
 
-float VECTOR3D_Length(const VECTOR3D* pVec)
+float VECTOR3D_Length(const VECTOR3D & vec)
 {
 	// computes a length of the vector
 
-	assert(pVec != nullptr);
-
-	return sqrtf((pVec->x * pVec->x) + (pVec->y * pVec->y) + (pVec->z * pVec->z));
+	return sqrtf((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
 
 } // end VECTOR3D_Length
 
 /////////////////////////////////////////////////////////////
 
-float VECTOR3D_Length_Fast(const VECTOR3D* pVec)
+float VECTOR3D_Length_Fast(const VECTOR3D & vec)
 {
 	// computes the magnitute of a vector using an approximation;
 	// very fast
 
-	assert(pVec != nullptr);
-
-	return Fast_Distance_3D(pVec->x, pVec->y, pVec->z);
+	return Fast_Distance_3D(vec.x, vec.y, vec.z);
 
 } // end VECTOR3D_Length_Fast
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Normalize(VECTOR3D* pVec)
+void VECTOR3D_Normalize(VECTOR3D & v)
 {
-	// normalizes the sent vector
-
-	assert(pVec != nullptr);
+	// this function normalizes the sent vector
 
 	// compute a length of the vector
-	float length = sqrtf((pVec->x * pVec->x) + (pVec->y * pVec->y) + (pVec->z * pVec->z));
+	float length = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 
 	// test for zero length vector; 
 	// if found return a zero vector
 	if (length < EPSILON_E5)
 	{
-		VECTOR3D_ZERO(pVec);
+		VECTOR3D_ZERO(v);
 		return;
 	}
 
 	float length_inv = 1.0f / length;
 
 	// normalize the vector
-	pVec->x *= length_inv;
-	pVec->y *= length_inv;
-	pVec->z *= length_inv;
+	v.x *= length_inv;
+	v.y *= length_inv;
+	v.z *= length_inv;
 
 } // end VECTOR3D_Normalize
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Normalize(const VECTOR3D* pVa, VECTOR3D* pVecN)
+void VECTOR3D_Normalize(const VECTOR3D & vec, VECTOR3D & vecN)
 {
 	// normalizes the sent vector and returns the result in pVecN
 
-	assert(pVa != nullptr);
-	assert(pVecN != nullptr);
-
 	// compute a length of the vector
-	float length = sqrtf((pVa->x * pVa->x) + (pVa->y * pVa->y) + (pVa->z * pVa->z));
+	float length = sqrtf((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
 
 	// test for zero length vector; 
 	// if found return a zero vector
 	if (length < EPSILON_E5)
 	{
-		VECTOR3D_ZERO(pVecN);
+		VECTOR3D_ZERO(vecN);
 		return;
 	}
 
 	float length_inv = 1.0f / length;
 
 	// normalize the vector
-	pVecN->x *= length_inv;
-	pVecN->y *= length_inv;
-	pVecN->z *= length_inv;
+	vecN.x *= length_inv;
+	vecN.y *= length_inv;
+	vecN.z *= length_inv;
 
 } // end VECTOR3D_Normalize
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Build(const VECTOR3D* pInit, const VECTOR3D* pTerm, VECTOR3D* pResult)
+void VECTOR3D_Build(const VECTOR3D & vInit, const VECTOR3D & vTerm, VECTOR3D & vecResult)
 {
 	// builds a vector init->term and stores the result into pResult;
 	// you can pass into this function points as well as vectors
 
-	assert(pInit != nullptr);
-	assert(pTerm != nullptr);
-	assert(pResult != nullptr);
-
-	pResult->x = pTerm->x - pInit->x;
-	pResult->y = pTerm->y - pInit->y;
-	pResult->z = pTerm->z - pInit->z;
+	vecResult.x = vTerm.x - vInit.x;
+	vecResult.y = vTerm.y - vInit.y;
+	vecResult.z = vTerm.z - vInit.z;
 
 } // end VECTOR3D_Build
 
 /////////////////////////////////////////////////////////////
 
-float VECTOR3D_CosTh(const VECTOR3D* pVecA, const VECTOR3D* pVecB)
+float VECTOR3D_CosTh(const VECTOR3D & vecA, const VECTOR3D & vecB)
 {
 	// this function returns the cosine of the angle between two vectors.
 	// Note, we could compute the actual angle many many times, in further calcs
 	// we will want ultimately compute cos of the angle, so why not just leave it!
-	assert(pVecA != nullptr);
-	assert(pVecB != nullptr);
 
-	return (VECTOR3D_Dot(pVecA, pVecB) / (VECTOR3D_Length(pVecA) * VECTOR3D_Length(pVecB)));
+	return (VECTOR3D_Dot(vecA, vecB) / (VECTOR3D_Length(vecA) * VECTOR3D_Length(vecB)));
 
 } // end VECTOR3D_CosTh
 
 /////////////////////////////////////////////////////////////
 
-void VECTOR3D_Print(const VECTOR3D* pVec, const char* name)
+void VECTOR3D_Print(const VECTOR3D & vec, const char* name)
 {
 	// this function prints out a VECTOR3D's data; used for the debugging purpose
 
-	assert(pVec != nullptr);
 	assert((name != nullptr) && (name[0] != '\0'));
 
 	// we need about 45 characters to print 3D vector's data (in format: vector_name = [X, Y, Z])
@@ -277,7 +247,7 @@ void VECTOR3D_Print(const VECTOR3D* pVec, const char* name)
 
 	for (UINT i = 0; i < 3; i++)
 	{
-		vectorData += std::to_string(pVec->M[i]);
+		vectorData += std::to_string(vec.M[i]);
 		vectorData += ", ";
 	}
 	vectorData += "]\n";

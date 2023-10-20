@@ -22,7 +22,7 @@ namespace MathLib
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void Init_Param_Line2D(const POINT2D* pInit, const POINT2D* pTerm, PARAMLINE2D* pLine)
+void Init_Param_Line2D(const POINT2D & pInit, const POINT2D & pTerm, PARAMLINE2D & pLine)
 {
 	// this function initializes 2D parametric line with two 2D points
 	// and computes a vector between them;
@@ -31,13 +31,13 @@ void Init_Param_Line2D(const POINT2D* pInit, const POINT2D* pTerm, PARAMLINE2D* 
 	// from p0 to p1 via 0 <= t <= 1
 
 	// start point
-	VECTOR2D_INIT(&(pLine->p0), pInit);
+	VECTOR2D_INIT(pLine.p0, pInit);
 	
 	// end point
-	VECTOR2D_INIT(&(pLine->p1), pTerm);
+	VECTOR2D_INIT(pLine.p1, pTerm);
 
 	// now compute direction vector from p0->p1
-	VECTOR2D_Build(pInit, pTerm, &(pLine->v));
+	VECTOR2D_Build(pInit, pTerm, pLine.v);
 
 } // end Init_Param_Line2D
 
@@ -136,30 +136,34 @@ int Intersect_Param_Lines2D(const PARAMLINE2D* line1, const PARAMLINE2D* line2, 
 
 ///////////////////////////////////////////////////////////
 
-void Init_Param_Line3D(const POINT3D* pInit, const POINT3D* pTerm, PARAMLINE3D* pLine)
+void Init_Param_Line3D(const POINT3D & pInit, const POINT3D & pTerm, PARAMLINE3D & pLine)
 {
 	// this functions initializes 3D parametric line using two input points, 
 	// computes a vector from pInit to pTerm, and returns the result in pLine
 
-	POINT3D_INIT(&(pLine->p0), pInit);
-	POINT3D_INIT(&(pLine->p1), pTerm);
-	VECTOR3D_Build(pInit, pTerm, &(pLine->v));
+	POINT3D_INIT(pLine.p0, pInit);
+	POINT3D_INIT(pLine.p1, pTerm);
+	VECTOR3D_Build(pInit, pTerm, pLine.v);
 
 } // end Init_Param_Line3D
 
 ///////////////////////////////////////////////////////////
 
-void Compute_Param_Line3D(const PARAMLINE3D* pL, const float t, POINT3D* pt)
+void Compute_Point_On_Param_Line3D(const PARAMLINE3D & pL, const float t, POINT3D & pt)
 {
 	// this function computes a point on the parametric line according 
 	// to the t parameter, and stores the result in the pt. When t=0 the
 	// function returns the beginning point, when t=1 it returns the end point
 
-	pt->x = pL->p0.x + pL->v.x * t;
-	pt->y = pL->p0.y + pL->v.y * t;
-	pt->z = pL->p0.z + pL->v.z * t;
+	// p = p0 + v*t
+	pt.x = pL.p0.x + pL.v.x * t;
+	pt.y = pL.p0.y + pL.v.y * t;
+	pt.z = pL.p0.z + pL.v.z * t;
 
 } // Compute_Param_Line3D
+
+///////////////////////////////////////////////////////////
+
 
 
 
@@ -171,9 +175,9 @@ void Compute_Param_Line3D(const PARAMLINE3D* pL, const float t, POINT3D* pt)
 // 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void PLANE3D_Init(PLANE3D* pPlane,
-	const POINT3D* p0,
-	const VECTOR3D* pNormal,
+void PLANE3D_Init(PLANE3D & plane,
+	const POINT3D & p0,
+	const VECTOR3D & normal,
 	const int normalize)
 {
 	// this function initializes a plane using a 3D point and a normal vector.
@@ -181,40 +185,36 @@ void PLANE3D_Init(PLANE3D* pPlane,
 	// for that set a normalize parameter to TRUE. Such normalization is needed 
 	// during a work with some algorithms
 
-	assert((pPlane != nullptr));
-	assert((p0 != nullptr));
-	assert((pNormal != nullptr));
-
 	// copy the point and initialize the normal vector
-	POINT3D_COPY(&(pPlane->p0), p0);
-	VECTOR3D_INIT(&(pPlane->n), pNormal);
+	POINT3D_COPY(plane.p0, p0);
+	VECTOR3D_INIT(plane.n, normal);
 
 	// if normalize is TRUE then the normal is made into a unit vector
 	if (normalize == TRUE)
 	{
-		VECTOR3D_Normalize(&(pPlane->n));
+		VECTOR3D_Normalize(plane.n);
 	}
 
 } // end PLANE3D_Init
 
 ///////////////////////////////////////////////////////////
 
-float Compute_Point_In_Plane3D(const POINT3D* pt, const PLANE3D* plane)
+float Compute_Point_In_Plane3D(const POINT3D & pt, const PLANE3D & plane)
 {
 	// this function checks a point location relative to a plane
 
-	assert((pt != nullptr) && (plane != nullptr));
-
-	// compute a DOT PRODUCT between a plane's normal vector and the vec_p0pt
-	return (plane->n.x * (pt->x - plane->p0.x)) +
-		   (plane->n.y * (pt->y - plane->p0.y)) +
-		   (plane->n.z * (pt->z - plane->p0.z));
+	// compute a DOT PRODUCT between a plane's normal vector and a vector plane.p0->pt
+	return (plane.n.x * (pt.x - plane.p0.x)) +
+		   (plane.n.y * (pt.y - plane.p0.y)) +
+		   (plane.n.z * (pt.z - plane.p0.z));
 } // end Compute_Point_In_Plane3D
 
-int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D* pLine,
-	const PLANE3D* pPlane,
-	float* t,
-	POINT3D* pt)
+///////////////////////////////////////////////////////////
+
+int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D & pLine,
+	const PLANE3D & plane,
+	float & t,
+	POINT3D & pt)
 {
 	// this function defines where the input parametric line intersects the plane.
 	// The function continues the line into both sides to infinity, but a segment
@@ -227,15 +227,13 @@ int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D* pLine,
 	//  3 - line coincide with a plane
 
 	// check input params
-	assert((pLine != nullptr) && (pPlane != nullptr));
-	assert((t != nullptr) && (pt != nullptr));
 
-	float plane_dot_line = VECTOR3D_Dot(&(pLine->v), &(pPlane->n));
+	float plane_dot_line = VECTOR3D_Dot(pLine.v, plane.n);
 
 	if (fabs(plane_dot_line) <= EPSILON_E5)
 	{
 		// the line is parallel to the plane. Does it coincide with this plane?
-		if (fabs(Compute_Point_In_Plane3D(&(pLine->p0), pPlane)) <= EPSILON_E5)
+		if (fabs(Compute_Point_In_Plane3D(pLine.p0, plane)) <= EPSILON_E5)
 			return PARAM_LINE_INTERSECT_EVERYWHERE;
 		else
 			return PARAM_LINE_NO_INTERSECT;
@@ -243,26 +241,98 @@ int Intersect_Param_Line3D_Plane3D(const PARAMLINE3D* pLine,
 
 
 	// first of all find a t parameter
-	*t = -(pPlane->n.x * pLine->p0.x +
-		pPlane->n.y * pLine->p0.y +
-		pPlane->n.z * pLine->p0.z -
-		pPlane->n.x * pPlane->p0.x -
-		pPlane->n.y * pPlane->p0.y -
-		pPlane->n.z * pPlane->p0.z) / (plane_dot_line);
+	t = -(plane.n.x * pLine.p0.x +
+		plane.n.y * pLine.p0.y +
+		plane.n.z * pLine.p0.z -
+		plane.n.x * plane.p0.x -
+		plane.n.y * plane.p0.y -
+		plane.n.z * plane.p0.z) / (plane_dot_line);
 
 	// put the t parameter into the equation of the straight line, and find
 	// coordinates of an intersection point (x, y, z)
-	pt->x = pLine->p0.x + pLine->v.x * (*t);
-	pt->y = pLine->p0.y + pLine->v.y * (*t);
-	pt->z = pLine->p0.z + pLine->v.z * (*t);
+	pt.x = pLine.p0.x + pLine.v.x * t;
+	pt.y = pLine.p0.y + pLine.v.y * t;
+	pt.z = pLine.p0.z + pLine.v.z * t;
 
 	// checking if the t parameter is in a [0, 1] range
-	if ((*t >= 0) && (*t <= 1))
+	if ((t >= 0) && (t <= 1))
 		return PARAM_LINE_INTERSECT_IN_SEGMENT;
 	else
 		return PARAM_LINE_INTERSECT_OUT_SEGMENT;
 
 } // end Intersect_Param_Line3D_Plane3D
 
+///////////////////////////////////////////////////////////
+
+float Distance_Point3D_To_Plane3D(const POINT3D & point,
+	const PLANE3D & plane)
+{
+	// this function computes ONLY distance from a point to a plane
+	//   Input:  pPoint = a 3D point anywhere in space
+	//           pPlane = a plane with point p0 and normal n
+	//  
+	//   Return: the distance from pPoint to the plane pPlane
+
+
+	// equation:  -n*(pPoint->p0 - pPlane->p0) / n^2
+	// or another representation: (a*x0 + b*y0 + c*z0 + d) / sqrt(nx^2 + ny^2 + nz^2)
+	return -VECTOR3D_Dot(plane.n, VECTOR3D_Sub(point, plane.p0) ) /
+		sqrtf(VECTOR3D_Dot(plane.n, plane.n));
+
+} // end Distance_Point3D_Plane3D
+
+  ///////////////////////////////////////////////////////////
+
+float Distance_Point3D_To_Plane3D(const POINT3D & point,
+	const PLANE3D & plane,
+	POINT3D & base)
+{
+	// this function computes BOTH distance and perp base from a point to a plane
+	//   Input:  pPoint = a 3D point anywhere in space
+	//           pPlane = a plane with point p0 and normal n
+	//   Output: *pBase = base point on pPlane of perpendicular from pPoint
+	//   Return: the distance from pPoint to the plane pPlane
+
+	// equation:  -n*(pPoint->p0 - pPlane->p0) / n^2
+	// or another representation: (a*x0 + b*y0 + c*z0 + d) / sqrt(nx^2 + ny^2 + nz^2)
+	float sn = VECTOR3D_Dot(plane.n, VECTOR3D_Sub(point, plane.p0) );
+	float sd = sqrtf(VECTOR3D_Dot(plane.n, plane.n));
+	float sb = -sn / sd;
+
+	// compute a base point
+	base.x = point.x + plane.n.x * sb;
+	base.y = point.y + plane.n.y * sb;
+	base.z = point.z + plane.n.z * sb;
+
+	VECTOR3D vecPointToBase(base, point);
+
+	return VECTOR3D_Length(vecPointToBase);
+
+} // end Distance_Point3D_Plane3D
+
+///////////////////////////////////////////////////////////
+
+float Distance_Point3D_To_Plane3D_Normalized(const POINT3D & point,
+	const PLANE3D & plane,
+	POINT3D & base)
+{
+	// this function computes a length of a perpendicular from
+	// a 3D point to a 3D plane and returns it on the stack;
+	//
+	// NOTE: it is supposed that the plane's normal vector is normalized
+
+	// equation:  -n*(pPoint->p0 - pPlane->p0)
+	// or another representation: (a*x0 + b*y0 + c*z0 + d)
+	float sb = -VECTOR3D_Dot(plane.n, VECTOR3D_Sub(point, plane.p0));
+
+	// compute a base point
+	base.x = point.x + plane.n.x * sb;
+	base.y = point.y + plane.n.y * sb;
+	base.z = point.z + plane.n.z * sb;
+
+	VECTOR3D vecPointToBase(base, point);
+
+	return VECTOR3D_Length(vecPointToBase);
+}
 
 } // end namespace MathLib

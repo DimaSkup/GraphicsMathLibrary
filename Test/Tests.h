@@ -35,7 +35,12 @@ private:
 	void Test_Parametric_Lines();
 	void Test_Parametric_Lines_2D_Intersection();
 	void Test_Parametric_Lines_3D();
+
+	// 3D planes
 	void Test_3D_Planes();
+	void Test_3D_Point_Pos_Relative_To_3D_Plane();
+	void Test_Intersection_Plane3D_PARAMLINE3D();
+	void Test_Distance_From_Point3D_To_Plane3D();
 
 private:
 	MathLib::MATRIX2X2 iMat2x2_;  // identity 2x2 matrix
