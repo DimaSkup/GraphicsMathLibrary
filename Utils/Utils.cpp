@@ -73,7 +73,8 @@ float Fast_Cos(float theta)
 
 int Fast_Distance_2D(int x, int y)
 {
-	// this function computes the distance from (0;0) to (x;y) with 3.5% error
+	
+	// this function computes the distance from (0;0) to (x;y) with 5% error
 
 	// first compute the absolute value of x and y
 	x = abs(x);
@@ -83,7 +84,7 @@ int Fast_Distance_2D(int x, int y)
 	int mn = MIN(x, y);
 
 	//return the distance
-	return (x + y - (mn >> 1) - (mn >> 2) + (mn >> 4));
+	return (x + y - (mn>>1) - (mn>>2) + (mn>>4));
 
 } // end Fast_Distance_2D
 
@@ -93,7 +94,7 @@ float Fast_Distance_3D(const float fx, const float fy, const float fz)
 {
 	// this function computes the distance from the origin to x,y,z
 
-	int temp = 0;  // uses for swapping
+	int temp = 0;  // is used for swapping
 	
 	// make sure that input values are all posivite
 	int x = static_cast<int>(fabs(fx) * 1024);

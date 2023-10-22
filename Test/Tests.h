@@ -17,7 +17,8 @@
 class Tests
 {
 public:
-	void Test_Coordinate_System();
+	void Test_Vectors_And_Points();
+	void Test_Coordinate_Systems();
 	void Test_Matrices();
 	void Test_Figures();
 	
@@ -25,7 +26,15 @@ public:
 
 
 private:
-	// MATRICES functional testing
+	// VECTORs/POINTs functional testing
+	void Test_2D_Vectors_Points();
+	void Test_3D_Vectors_Points();
+	void Test_4D_Vectors_Points();
+
+	void Test_2D_Vectors_Points_Init_And_Inline_Func();
+	void Test_2D_Vectors_Math_Operations();
+
+	// MATRICEs functional testing
 	void Test_Matrix_Init();
 	void Test_Matrices_Print_Func();
 	void Test_Matrices_Add_Func();

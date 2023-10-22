@@ -24,23 +24,27 @@ namespace MathLib
 // 2D vector or point, without w 
 typedef struct VECTOR2D_TYPE
 {
+	// default constructor
 	VECTOR2D_TYPE()
 	{
 		this->x = 0.0f;
 		this->y = 0.0f;
 	}
 
-	VECTOR2D_TYPE(const float dx, const float dy)
-	{
-		this->x = dx;
-		this->y = dy;
-	}
+	
 
 	// init a vector using references to two 2D points
 	VECTOR2D_TYPE(const VECTOR2D_TYPE & pInit, const VECTOR2D_TYPE & pTerm)
 	{
 		this->x = pTerm.x - pInit.x;
 		this->y = pTerm.y - pInit.y;
+	}
+
+	// init a vector/point using separate float values
+	VECTOR2D_TYPE(const float dx, const float dy)
+	{
+		this->x = dx;
+		this->y = dy;
 	}
 
 	// init a point using another 2D point
@@ -72,7 +76,7 @@ typedef struct VECTOR2D_TYPE
 
 // functions for work with vectors
 
-// reset of vectors
+// reset of vector
 inline void VECTOR2D_ZERO(VECTOR2D & vec)
 {
 	vec.x = vec.y = 0.0f;
@@ -101,6 +105,12 @@ inline void VECTOR2D_COPY(VECTOR2D & vecDst, const VECTOR2D & vecSrc)
 	vecDst.y = vecSrc.y;
 }
 
+// reset of point
+inline void POINT2D_ZERO(POINT2D & pDst)
+{
+	pDst.x = 0;
+	pDst.y = 0;
+}
 
 // points initialization with particular values
 inline void POINT2D_INIT_XY(POINT2D & pDst,

@@ -7,7 +7,11 @@
 ////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "VectorAndPoint.h"
+#include "../VectorAndPoint/VectorAndPoint.h"
+
+
+namespace MathLib
+{
 
 
 //////////////////////////////////
@@ -84,3 +88,6 @@ inline void QUAT_COPY(QUAT* pQuatDst, const QUAT* pQuatSrc)
 	pQuatDst->y = pQuatSrc->y;
 	pQuatDst->z = pQuatSrc->z;
 }
+
+
+} // end namespace MathLib

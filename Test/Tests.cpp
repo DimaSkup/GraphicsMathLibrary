@@ -16,8 +16,7 @@
 //                                PUBLIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void Tests::Test_Coordinate_System()
+void Tests::Test_Coordinate_Systems()
 {
 
 } // end Test_Coordinate_System
@@ -46,6 +45,8 @@ void Tests::Test_Figures()
 	Test_Parametric_Lines();
 
 } // end Test_Figures
+
+
 
 
 
