@@ -12,6 +12,7 @@
 #include "../Log/Log.h"
 #include "../Matrix/Matrix.h"
 #include "../Figures/Figures.h"
+#include "../Quaternion/Quaternion.h"
 
 
 class Tests
@@ -21,6 +22,7 @@ public:
 	void Test_Coordinate_Systems();
 	void Test_Matrices();
 	void Test_Figures();
+	void Test_Quaternions();
 	
 
 

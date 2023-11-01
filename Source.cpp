@@ -13,6 +13,7 @@ int main()
 	Log log;
 	Tests test;
 
+	test.Test_Quaternions();
 	test.Test_Vectors_And_Points();
 	test.Test_Matrices();
 	test.Test_Figures();

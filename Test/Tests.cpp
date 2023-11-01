@@ -46,6 +46,179 @@ void Tests::Test_Figures()
 
 } // end Test_Figures
 
+///////////////////////////////////////////////////////////
+
+void Tests::Test_Quaternions()
+{
+	Log::Print("\n\n");
+	Log::Print("-------------------- TEST: QUATERNIONS --------------------\n");
+
+	/////////////////////////////////////////////
+
+	// TEST 1: create a quaternion using a direction vector and a rotation angle
+
+	// create a rotation vector which is representing the diagonal of the first octant
+	MathLib::VECTOR3D v{ 1, 1, 1 };
+	MathLib::QUAT qr;
+
+	// normalize v
+	MathLib::VECTOR3D_Normalize(v);
+
+	float theta = DEG_TO_RAD(100);   // 100 degrees
+
+	// creation of a rotation quaternion
+	MathLib::VECTOR3D_Theta_To_QUAT(qr, v, theta);
+
+	/////////////////////////////////////////////
+
+	// TEST 2: create a quaternion using Euler's rotation angles
+
+	MathLib::QUAT qzyx;
+
+	// rotation angles 
+	float theta_x = DEG_TO_RAD(20);
+	float theta_y = DEG_TO_RAD(30);
+	float theta_z = DEG_TO_RAD(45);
+
+	// create a rotation quaternion
+	MathLib::EulerZYX_To_QUAT(qzyx, theta_z, theta_y, theta_x);
+
+	/////////////////////////////////////////////
+
+	// TEST 3: transform a unit quaternion into a unit direction vector and 
+	//         a rotation angle around it
+
+	MathLib::QUAT q;       // suppose that this quaternion is a unit quaternion
+	MathLib::VECTOR3D vec_dir; 
+	theta = 0;
+
+	// transform a quaternion into a vector and angle
+	MathLib::QUAT_To_VECTOR3D_Theta(q, vec_dir, theta);
+
+	/////////////////////////////////////////////
+
+	// TEST 4: add two quaternions together
+
+	const MathLib::QUAT q1{ 1, 2, 3, 4 };
+	const MathLib::QUAT q2{ 5, 6, 7, 8 };
+	MathLib::QUAT qsum;
+
+	// computation of a sum of the quaternions
+	MathLib::QUAT_Add(q1, q2, qsum);
+
+	// check the result
+	assert((qsum.w == 6) && (qsum.x == 8) && (qsum.y == 10) && (qsum.z == 12));
+
+	/////////////////////////////////////////////
+
+	// TEST 5: subtraction of quaternions
+
+	MathLib::QUAT qdiff;
+
+	// computation of a difference between two quaternions
+	MathLib::QUAT_Sub(q1, q2, qdiff);
+
+	// check the result
+	assert((qdiff.w == -4) && (qdiff.x == -4) && (qdiff.y == -4) && (qdiff.z == -4));
+
+	/////////////////////////////////////////////
+
+	// TEST 6: computation of the conjugate of a quaternion
+
+	MathLib::QUAT qconj;
+
+	MathLib::QUAT_Conjugate(q1, qconj);
+
+	// check the result
+	assert((qconj.w == q1.w) && (qconj.x == -q1.x) && (qconj.y == -q1.y) && (qconj.z == -q1.z));
+
+	/////////////////////////////////////////////
+
+	// TEST 7: scaling of quaternion (case 1)
+
+	MathLib::QUAT qs;  
+
+	// scaling q1 with coefficient of 2
+	MathLib::QUAT_Scale(q1, 2, qs);
+
+	// check the result
+	assert((qs.w == q1.w*2) && (qs.x == q1.x*2) && (qs.y == q1.y*2) && (qs.z == q1.z*2));
+
+	/////////////////////////////////////////////
+
+	// TEST 8: scaling of quaternion (case 2)
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);
+
+	// scaling q with coefficient of 2
+	MathLib::QUAT_Scale(q, 2);
+
+	// check the result
+	assert((qs.w == 2) && (qs.x == 4) && (qs.y == 6) && (qs.z == 8));
+
+	/////////////////////////////////////////////
+
+	// TEST 9: get a norm (length) of quaternion
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);    // its length == sqrt(30)
+
+	// what is the length of q?
+	float qnorm = MathLib::QUAT_Norm(q);
+
+	// check the result
+	assert(qnorm == sqrtf(30));
+
+	/////////////////////////////////////////////
+
+	// TEST 10: get a square of a norm (length) of quaternion
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);    // its length == sqrt(30)
+
+	// what is the square of length of q?
+	float qnorm2 = MathLib::QUAT_Norm2(q);
+
+	// check the result
+	assert(qnorm2 == 30);
+
+	/////////////////////////////////////////////
+
+	// TEST 11: normalization of quaternion (case 1)
+
+	MathLib::QUAT qn;   // normalized quaternion
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);
+
+	// normalization of q
+	MathLib::QUAT_Normalize(q, qn);
+
+	// check the result
+	float len_q_inv = 1.0f / MathLib::QUAT_Norm(q);
+	assert((qn.w == (q.w * len_q_inv)) &&
+		   (qn.x == (q.x * len_q_inv)) &&
+		   (qn.y == (q.y * len_q_inv)) &&
+		   (qn.z == (q.z * len_q_inv)));
+
+	/////////////////////////////////////////////
+
+	// TEST 12: normalization of quaternion (case 2)
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);
+
+	// this will be used for checking the result
+	MathLib::QUAT_Normalize(q, qn);  
+
+	// normalization of q (with modification of q)
+	MathLib::QUAT_Normalize(q);
+	
+	// check the result
+	assert((qn.w == q.w) &&	(qn.x == q.x) && (qn.y == q.y) && (qn.z == q.z));
+
+	/////////////////////////////////////////////
+	
+
+	Log::Print(LOG_MACRO, "SUCCESS");
+
+} // end Test_Quaternions
+
 
 
 
