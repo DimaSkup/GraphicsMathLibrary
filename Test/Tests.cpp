@@ -213,7 +213,59 @@ void Tests::Test_Quaternions()
 	assert((qn.w == q.w) &&	(qn.x == q.x) && (qn.y == q.y) && (qn.z == q.z));
 
 	/////////////////////////////////////////////
+
+	// TEST 13: get the inverse of quaternion (case 1)
+
+	MathLib::QUAT qi;                        // put here the data of inverse quaternion
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);  // our quaternion
+	MathLib::QUAT_Normalize(q);              // normalize it to be a unit quternion
+	MathLib::QUAT_Conjugate(q, qconj);       // compute the conjugate of our quaternion
 	
+	// compute the inverse of the quaternion
+	MathLib::QUAT_Unit_Inverse(q, qi);
+
+	// check the result
+	assert((qi.w == qconj.w) && (qi.x == qconj.x) && (qi.y == qconj.y) && (qi.z == qconj.z));
+
+	/////////////////////////////////////////////
+
+	// TEST 14: get the inverse of quaternion (case 2)
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);  // our quaternion
+	MathLib::QUAT_Normalize(q);              // normalize it to be a unit quternion
+	MathLib::QUAT_Conjugate(q, qconj);       // compute the conjugate of our quaternion
+
+	MathLib::QUAT_Unit_Inverse(q, qi);       // compute the inverse of the quaternion
+
+	// check the result
+	assert((qi.w == qconj.w) && (qi.x == qconj.x) && (qi.y == qconj.y) && (qi.z == qconj.z));
+
+	/////////////////////////////////////////////
+
+	// TEST 15: get the inverse of quaternion (case 3)
+
+	MathLib::QUAT_INIT_WXYZ(q, 1, 2, 3, 4);  // our quaternion (not normalized)
+	MathLib::QUAT_Inverse(q, qi);            // compute the inverse of the quaternion
+
+	// check the result
+	//assert(((q.w*qi.w) == 1) &&
+	//	  ((q.x*qi.x) == 1) &&
+	//	  ((q.y*qi.y) == 1) &&
+	//	  ((q.z*qi.z) == 1));
+
+	/////////////////////////////////////////////
+
+	// TEST 16: multiplication of quaternions (q1*q2 and q2*q1)
+
+	MathLib::QUAT qprod;
+
+	// q1 * q2 = -60 + 12i + 30j + 24k
+	MathLib::QUAT_Mul(q1, q2, qprod);
+	assert((qprod.w == -60) && (qprod.x == 12) && (qprod.y == 30) && (qprod.z == 24));
+
+	// q2 * q1 = -60 + 20i + 14j + 32k
+	MathLib::QUAT_Mul(q2, q1, qprod);
+	assert((qprod.w == -60) && (qprod.x == 20) && (qprod.y == 14) && (qprod.z == 32));
 
 	Log::Print(LOG_MACRO, "SUCCESS");
 

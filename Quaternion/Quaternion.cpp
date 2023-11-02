@@ -201,4 +201,91 @@ void QUAT_Normalize(QUAT & q)
 
 ///////////////////////////////////////////////////////////
 
+void QUAT_Unit_Inverse(const QUAT & q, QUAT & qi)
+{
+	// this function computes the inverse of a unit quaternion and
+	// stores the result in qi;
+	//
+	// note: 1. the input quaternion q must be a unit quaternion
+	//       2. the inverse of a unit quaternion is a conjugate quaternion
+
+	qi.w = q.w;
+	qi.x = -q.x;
+	qi.y = -q.y;
+	qi.z = -q.z;
+
+} // end QUAT_Unit_Inverse
+
+///////////////////////////////////////////////////////////
+
+void QUAT_Unit_Inverse(QUAT & q)
+{
+	// this function computes the inverse of a unit quaternion and
+	// stores the result in q;
+	//
+	// note: 1. the input quaternion q must be a unit quaternion
+	//       2. the inverse of a unit quaternion is a conjugate quaternion
+
+	q.x = -q.x;
+	q.y = -q.y;
+	q.z = -q.z;
+
+} // end QUAT_Unit_Inverse
+
+///////////////////////////////////////////////////////////
+
+void QUAT_Inverse(const QUAT & q, QUAT & qi)
+{
+	// this function computes the inverse of a quaternion and
+	// stores the result in qi;
+	//
+	// note: for this function there is no need that an input 
+	//       quaternion q must be a unit quaternion
+
+
+	// 1 / q_norm^2
+	float norm2_inv = 1.0f / ((q.w*q.w) + (q.x*q.x) + (q.y*q.y )+ (q.z*q.z));
+
+	// q_inverse = q_conjugate / q_norm^2
+	qi.w =  q.w * norm2_inv;
+	qi.x = -q.x * norm2_inv;
+	qi.y = -q.y * norm2_inv;
+	qi.z = -q.z * norm2_inv;
+
+} // end QUAT_Inverse
+
+///////////////////////////////////////////////////////////
+
+void QUAT_Mul(const QUAT & q1, const QUAT & q2, QUAT & qprod)
+{
+	// this function multiplies q1*q2;
+	// note: in general, quaternion multiplication is no commutative so
+	// q1*q2 != q2*q1
+	//
+	// qprod.w = q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z;
+	// qprod.x = q1.w*q2.x + q1.x*q2.w + q1.y*q2.z - q1.z*q2.y;
+	// qprod.y = q1.w*q2.y - q1.x*q2.z + q1.y*q2.w - q1.z*q2.x;
+	// qprod.z = q1.w*q2.z + q1.x*q2.y - q1.y*q2.x + q1.z*q2.w;
+
+	// to reduce the count of multiplications there is using
+	// common factors allocation
+	float prd_0 = (q1.z - q1.y) * (q2.y - q2.z);
+	float prd_1 = (q1.w + q1.x) * (q2.w + q2.x);
+	float prd_2 = (q1.w - q1.x) * (q2.y + q2.z);
+	float prd_3 = (q1.y + q1.z) * (q2.w - q2.x);
+	float prd_4 = (q1.z - q1.x) * (q2.x - q2.y);
+	float prd_5 = (q1.z + q1.x) * (q2.x + q2.y);
+	float prd_6 = (q1.w + q1.y) * (q2.w - q2.z);
+	float prd_7 = (q1.w - q1.y) * (q2.w + q2.z);
+	float prd_8 = prd_5 + prd_6 + prd_7;
+	float prd_9 = 0.5f * (prd_4 + prd_8);
+
+	// compute the final result using temporal variables
+	qprod.w = prd_0 + prd_9 - prd_5;
+	qprod.x = prd_1 + prd_9 - prd_8;
+	qprod.y = prd_2 + prd_9 - prd_7;
+	qprod.z = prd_3 + prd_9 - prd_6;
+
+} // end QUAT_Mul
+
 } // end namespace MathLib

@@ -122,6 +122,10 @@ float QUAT_Norm2(const QUAT & q);
 void QUAT_Normalize(const QUAT & q, QUAT & qn);
 void QUAT_Normalize(QUAT & q);
 
-void QUAT_Unit_Inverse()
+void QUAT_Unit_Inverse(const QUAT & q, QUAT & qi);
+void QUAT_Unit_Inverse(QUAT & q);
+void QUAT_Inverse(const QUAT & q, QUAT & qi);
+
+void QUAT_Mul(const QUAT & q1, const QUAT & q2, QUAT & qprod);
 
 } // end namespace MathLib
